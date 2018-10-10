@@ -1,0 +1,197 @@
+/* 
+html5doctor.com Reset Stylesheet
+v1.4.1 
+2010-03-01
+Author: Richard Clark - http://richclarkdesign.com
+*/
+*{
+    font-family:'STHeiti','Microsoft YaHei',Helvetica,Arial,sans-serif;
+    font-size: 100%;
+    box-sizing:border-box;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+/*    min-width: 1200px;*/
+}
+a{
+    color: #7c7b7b;
+    text-decoration: none;
+}
+a {
+    transition-property: background,color;
+    transition-duration: .2s;
+    transition-timing-function: ease-out;
+    -moz-transition-timing-function: ease-out;
+    -webkit-transition-timing-function: ease-out;
+    -o-transition-timing-function: ease-out;
+}
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section, summary,
+time, mark, audio, video {
+    margin:0;
+    padding:0;
+    border:0;
+    outline:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+body {
+    line-height:1;
+}
+
+:focus {
+	outline: 1;
+}
+
+article,aside,canvas,details,figcaption,figure,
+footer,header,hgroup,menu,nav,section,summary { 
+    display:block;
+}
+
+nav ul {
+    list-style:none;
+}
+
+blockquote, q {
+    quotes:none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content:'';
+    content:none;
+}
+
+a {
+    margin:0;
+    padding:0;
+    border:0;
+    font-size:100%;
+    vertical-align:baseline;
+    background:transparent;
+}
+
+ins {
+    background-color:#ff9;
+    color:#000;
+    text-decoration:none;
+}
+
+mark {
+    background-color:#ff9;
+    color:#000; 
+    font-style:italic;
+    font-weight:bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title], dfn[title] {
+    border-bottom:1px dotted #000;
+    cursor:help;
+}
+
+table {
+    border-collapse:collapse;
+    border-spacing:0;
+}
+
+hr {
+    display:block;
+    height:1px;
+    border:0;   
+    border-top:1px solid #cccccc;
+    margin:1em 0;
+    padding:0;
+}
+
+input, select {
+    vertical-align:middle;
+}
+ul,li{
+    list-style: none;
+}
+em{
+    font-style: normal;
+}
+.clear:after{
+    clear: both;
+    height: 0;
+    display: block;
+    content: "";
+}
+.clear{
+    clear: both;
+}
+input{
+    border:1px solid #fff;
+
+}
+input:focus{
+    border:1px solid #fff;
+}
+input,textarea{ 
+    outline:none; 
+}
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+@media only screen and (min-width: 270px){
+    html {
+        font-size: 65%!important;
+    }
+}
+@media only screen and (min-width: 370px){
+    html {
+        font-size: 75%!important;
+    }
+}
+@media only screen and (min-width: 414px){
+    html {
+        font-size: 81.3%!important;
+    }
+}
+@media only screen and (min-width: 481px){
+    html {
+        font-size: 94%!important;
+    }
+}
+@media only screen and (min-width: 561px){
+    html {
+        font-size: 109%!important;
+    }
+}
+@media only screen and (min-width: 641px){
+    html {
+        font-size: 110%!important;
+    }
+
+}
+
+.gutter{
+    display: none;
+}
+.container{
+    word-wrap: break-word;
+}
+
+#highlighter_322133{
+    font-size: 0.6rem;
+}

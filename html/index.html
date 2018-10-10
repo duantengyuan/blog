@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>秋风的博客</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+<body scroll="no">
+<header>
+  <nav class="nav">
+    <ul class="title clear">
+      <a href="../index.html">
+        秋风
+      </a>
+      <a href="./index.html">
+        博客
+      </a>
+      <a href="./tag.html">
+            归档
+      </a>
+      <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
+        <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+      </a>
+      <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
+        <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+      </a>
+      <a href="https://github.com/hua1995116/" class="big-media">
+        <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+      </a>
+    </ul>
+  </nav>
+</header>
+<div class="body-content clear">
+  <section id="content" class="person-left-content">
+  </section>
+  <section class="person-right-content">
+    <div class="person-title">
+      <div class="person-title-img"></div>
+      <div class="person-title-name">蓝色的秋风</div>
+      <!-- <div class="person-title-me"><a href="">about me</a></div> -->
+      <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+      <div class="person-title-tag">
+          <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="http://blog.csdn.net/blueblueskyhua/article/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://github.com/hua1995116/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+      </div>
+    </div>
+    <div class="person-tag person-title clear">
+    </div>
+  </section>
+</div>
+<div id="page">
+  <div index='0' class="page-item">上一页</div>
+  <div index='1' class="page-item">下一页</div>
+</div>
+<div class="blog-bottom">
+  <!-- 本站总访问量<span id="busuanzi_value_site_pv"></span>次 -->
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<script src="../js/scrollReveal.js"></script>
+<script src="../js/promise.js"></script>
+<script src="../js/axios.js"></script>
+<script>
+  var data;
+  var index = 0;
+  var content = document.getElementById('content');
+  axios.get('../json/data.json')
+    .then(function (response) {
+       data = response.data;
+      handleHhtml(content, data['list0']);
+
+      handlePages(data);
+
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  axios.get('../json/tagdata.json')
+    .then(function (response) {
+      data = response.data;
+      handletag(data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });  
+
+  function handletag(taglist) {
+    var personTag = document.querySelector('.person-tag');
+    var html = '';
+    for(var i in taglist) {
+      html += '<div class="person-tag-list">'+i+'</div>';
+    }
+    personTag.innerHTML = html;
+  }
+  function handleHhtml(content, data) {
+    var html = '';
+    for(var i = 0; i < data.length; i ++) {
+      html += '<div class="list" data-scroll-reveal="enter bottom">'+
+                '<div class="header"><a href="'+data[i].fileName+'"><h1>'+data[i].title+'</h1></a></div>'+
+                '<div class="type clear">'+
+                  handleTag(data[i].tag)+
+                '</div>'+
+                '<div class="content">'+data[i].description+'</div>'+
+                '<div class="timer">'+data[i].date+'</div>'+
+              '</div>';
+    }
+    content.innerHTML = html;
+    setTimeout(function() {
+      new scrollReveal({
+        reset: true
+      });
+    },0);
+  }
+
+  function handleTag(tag) {
+    var html = '';
+    tag = tag.split(',')
+    for(var i = 0; i < tag.length; i++) {
+      html += '<span class="span_button">'+tag[i]+'</span>'
+    }
+    return html;
+  }
+
+  function handlePages(data) {
+    var page = document.getElementById('page');
+    var length = Object.keys(data).length;
+
+    page.addEventListener('click', function(e) {
+      var targer = e.target || e.srcElement;
+      if (targer.getAttribute('index') === '0') {
+        if (index === 0) {
+          alert('最前啦');
+        } else {
+          index--;
+          var listname = 'list' + index;
+          handleHhtml(content, data[listname]);
+        }
+      } else {
+        if (index === length - 1) {
+          alert('最后啦');
+        } else {
+          index++;
+          var listname = 'list' + index;
+          handleHhtml(content, data[listname]);
+        }
+      }
+    })
+  }
+</script>
+<script>
+  // NProgress.set(0.4);
+  NProgress.start();
+  window.onload = function() {
+    NProgress.done();
+  }
+  var _hmt = _hmt || [];
+  (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+</body>
+</html>
