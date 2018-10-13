@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title> vue-mixins一些常用方法</title>
+  <title> vue-mixins一些常用方法
+  </title>
   <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
   <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -20,23 +21,23 @@
     <nav class="nav">
       <ul class="title clear">
         <a href="../index.html">
-        小乐
-      </a>
+          小乐
+        </a>
         <a href="./index.html">
-        博客
-      </a>
+          博客
+        </a>
         <a href="./tag.html">
-            归档
+          归档
         </a>
         <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
         <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
         <a href="https://github.com/hua1995116/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
       </ul>
     </nav>
   </header>
@@ -46,24 +47,29 @@
         <div class="header">
           <h1>
             vue-mixins一些常用方法
+
           </h1>
         </div>
         <div class="readers">
           阅读量<span id="busuanzi_value_page_pv"></span>
         </div>
         <div class="type clear">
-          <span class="span_button"> vue</span>
+          <span class="span_button"> vue
+          </span>
         </div>
         <div class="content markdown-body">
           <h1 id="-">前言</h1>
-          <p>今天接手公司的一个vue的项目，发现项目中有个mixins属性，我发现之前的项目中都没有发现过这个属性。查阅了官方文档并进行了总结。 官方文档: <a href="https://cn.vuejs.org/v2/guide/mixins.html">mixins</a> vue-mixins与父子组件还是有很大的区别的。
-          </p>
+          <p>今天接手公司的一个vue的项目，发现项目中有个mixins属性，我发现之前的项目中都没有发现过这个属性。查阅了官方文档并进行了总结。
+            官方文档: <a href="https://cn.vuejs.org/v2/guide/mixins.html">mixins</a>
+            vue-mixins与父子组件还是有很大的区别的。</p>
           <h1 id="-mixins-">组件与mixins区别</h1>
-          <p><strong>组件：</strong> 父组件 + 子组件 &gt;&gt;&gt; 父组件 + 子组件
-            <strong>mixins：</strong> 父组件 + 子组件 &gt;&gt;&gt; new父组件</p>
+          <p><strong>组件：</strong>
+            父组件 + 子组件 &gt;&gt;&gt; 父组件 + 子组件
+            <strong>mixins：</strong>
+            父组件 + 子组件 &gt;&gt;&gt; new父组件</p>
           <h1 id="-">使用场景</h1>
-          <p>当两个组件存在相同的方法，例如需要进行初始化，例如分页操作，进入页面时，需要对页面初始化页面。这个时候你可以选择传统的写组件来进行分离，但是使用mixins可以不通过状态传递，直接进行强大的混合，方便了许多。 mixins允许你封装一块在应用的其他组件中都可以使用的函数。如果使用姿势得当，他们不会改变函数作用域外部的任何东西，因此哪怕执行多次，只要是同样的输入你总是能得到一样的值，
-          </p>
+          <p>当两个组件存在相同的方法，例如需要进行初始化，例如分页操作，进入页面时，需要对页面初始化页面。这个时候你可以选择传统的写组件来进行分离，但是使用mixins可以不通过状态传递，直接进行强大的混合，方便了许多。
+            mixins允许你封装一块在应用的其他组件中都可以使用的函数。如果使用姿势得当，他们不会改变函数作用域外部的任何东西，因此哪怕执行多次，只要是同样的输入你总是能得到一样的值，</p>
           <h1 id="-">使用方法</h1>
           <h2 id="1-">1.基础用法</h2>
           <pre><code class="lang-vue">// 定义一个混合对象
@@ -162,7 +168,7 @@ new Vue({
           <!-- <div class="view-cnt">（111 人已阅）</div> -->
         </div>
         <div class="my-pay">
-          <div class="my-pay-btn">赞赏</div>
+          <div class="my-pay-btn">打赏</div>
           <div class="my-pay-type clear">
             <div class="my-pay-alipay my-pay-div"></div>
             <div class="my-pay-weixin my-pay-div"></div>
@@ -188,18 +194,18 @@ new Vue({
     <section class="person-right-content">
       <div class="person-title">
         <div class="person-title-img"></div>
-        <div class="person-title-name">蓝色的小乐</div>
+        <div class="person-title-name">秘小乐</div>
         <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
         <div class="person-title-tag">
           <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
           <a href="http://blog.csdn.net/blueblueskyhua/article/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
           <a href="https://github.com/hua1995116/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
         </div>
       </div>
       <div class="person-tag person-title clear">

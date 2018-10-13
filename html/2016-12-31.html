@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title> 你不知道的javascript之this的全面解析之绑定规则(一)</title>
+  <title> 你不知道的javascript之this的全面解析之绑定规则(一)
+  </title>
   <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
   <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -20,23 +21,23 @@
     <nav class="nav">
       <ul class="title clear">
         <a href="../index.html">
-        小乐
-      </a>
+          小乐
+        </a>
         <a href="./index.html">
-        博客
-      </a>
+          博客
+        </a>
         <a href="./tag.html">
-            归档
+          归档
         </a>
         <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
         <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
         <a href="https://github.com/hua1995116/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
       </ul>
     </nav>
   </header>
@@ -46,25 +47,29 @@
         <div class="header">
           <h1>
             你不知道的javascript之this的全面解析之绑定规则(一)
+
           </h1>
         </div>
         <div class="readers">
           阅读量<span id="busuanzi_value_page_pv"></span>
         </div>
         <div class="type clear">
-          <span class="span_button"> js</span>
+          <span class="span_button"> js
+          </span>
         </div>
         <div class="content markdown-body">
-          <p>##1.1 默认绑定 首先介绍的是函数调用类型：独立函数调用，在没有其他应用下的默认规则。 首先看以下代码
-          </p>
+          <p>##1.1 默认绑定
+            首先介绍的是函数调用类型：独立函数调用，在没有其他应用下的默认规则。
+            首先看以下代码</p>
           <pre><code class="lang-javascript">function foo(){
     console.log(this.a);
 }
 var a = 2;
 foo();//2
 </code></pre>
-          <p>我们可以看到调用foo()时，this.a被解析成了全局变量a，为什么，因为在上述例子中，函数调用了默认绑定，因此this指向了全局对象。 那么我们怎么知道这里应用了默认绑定呢？可以通过分析调用位置来看看foo()是如何调用的。在代码中,foo()是直接使用不带任何修饰的函数引用进行调用的，因此只能使用默认绑定，无法应用其他规则。 如果使用严格模式，则不能将全局对象用于默认绑定，因此this会绑定undefind:
-          </p>
+          <p>我们可以看到调用foo()时，this.a被解析成了全局变量a，为什么，因为在上述例子中，函数调用了默认绑定，因此this指向了全局对象。
+            那么我们怎么知道这里应用了默认绑定呢？可以通过分析调用位置来看看foo()是如何调用的。在代码中,foo()是直接使用不带任何修饰的函数引用进行调用的，因此只能使用默认绑定，无法应用其他规则。
+            如果使用严格模式，则不能将全局对象用于默认绑定，因此this会绑定undefind:</p>
           <pre><code class="lang-javascript">function foo(){
     &quot;use strict &quot;;
     console.log(this.a);
@@ -72,8 +77,8 @@ foo();//2
 var a = 2;
 foo();//TyoeError:this is undefind
 </code></pre>
-          <p>##1.2 隐式绑定 另一条规则是调用的位置是否有上下文对象，或者说是否被某个对象拥有或者包含，不过这种说法可能会造成一些误导。
-          </p>
+          <p>##1.2 隐式绑定
+            另一条规则是调用的位置是否有上下文对象，或者说是否被某个对象拥有或者包含，不过这种说法可能会造成一些误导。</p>
           <pre><code class="lang-javascript">function foo(){
     console.log(this.a );
 }
@@ -83,8 +88,10 @@ var obj = {
 };
 obj.foo();//2
 </code></pre>
-          <p>首先需要注意的是foo()的声明方式，及其之后是如何被当作引用属性添加到obj中的，但是无论是直接在obj中定义还是先定义再添加引用属性，这个函数严格来说都不属于obj对象。 然而，调用位置会使用obj上下文来引用函数，因此你可以说函数被调用时obj对象“拥有”或者“包含”它。 无论你如何称呼，当foo()被调用时，它的前面确实加上了对obj的引用，隐式绑定规则会把函数调用中的this绑定到这个上下文对象。 对象属性引用链只有上一层或者说最后一层在调用中起作用。
-          </p>
+          <p>首先需要注意的是foo()的声明方式，及其之后是如何被当作引用属性添加到obj中的，但是无论是直接在obj中定义还是先定义再添加引用属性，这个函数严格来说都不属于obj对象。
+            然而，调用位置会使用obj上下文来引用函数，因此你可以说函数被调用时obj对象“拥有”或者“包含”它。
+            无论你如何称呼，当foo()被调用时，它的前面确实加上了对obj的引用，隐式绑定规则会把函数调用中的this绑定到这个上下文对象。
+            对象属性引用链只有上一层或者说最后一层在调用中起作用。</p>
           <pre><code class="lang-javascript">function foo(){
     console.log(this.a);
 }
@@ -101,7 +108,8 @@ var obj2 = {
 
 obj2.obj.foo()//12
 </code></pre>
-          <p>###1.2.1 隐式丢失 type1 :</p>
+          <p>###1.2.1 隐式丢失
+            type1 :</p>
           <pre><code class="lang-javascript">function foo(){
     console.log(this.a);
 }
@@ -153,7 +161,7 @@ setTimeout(obj.foo,1000);//gril !
           <!-- <div class="view-cnt">（111 人已阅）</div> -->
         </div>
         <div class="my-pay">
-          <div class="my-pay-btn">赞赏</div>
+          <div class="my-pay-btn">打赏</div>
           <div class="my-pay-type clear">
             <div class="my-pay-alipay my-pay-div"></div>
             <div class="my-pay-weixin my-pay-div"></div>
@@ -179,18 +187,18 @@ setTimeout(obj.foo,1000);//gril !
     <section class="person-right-content">
       <div class="person-title">
         <div class="person-title-img"></div>
-        <div class="person-title-name">蓝色的小乐</div>
+        <div class="person-title-name">秘小乐</div>
         <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
         <div class="person-title-tag">
           <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
           <a href="http://blog.csdn.net/blueblueskyhua/article/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
           <a href="https://github.com/hua1995116/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
         </div>
       </div>
       <div class="person-tag person-title clear">

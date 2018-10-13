@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title> 用vuejs仿网易云音乐（实现听歌以及搜索功能）
-  </title>
+  <title> 移动端现状</title>
   <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
   <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -46,74 +45,144 @@
       <div class="detail-content">
         <div class="header">
           <h1>
-            用vuejs仿网易云音乐（实现听歌以及搜索功能）
-
+            移动端现状
           </h1>
         </div>
         <div class="readers">
           阅读量<span id="busuanzi_value_page_pv"></span>
         </div>
         <div class="type clear">
-          <span class="span_button"> vue
-          </span>
+          <span class="span_button"> 移动端</span><span class="span_button"> 分辨率</span>
         </div>
         <div class="content markdown-body">
-          <p>####<strong>前言</strong>
-            前端时间学了vue，一开始看了vue1.0，后来实在觉得技术总得实践，就直接上手vue2.0。然后花了将近一周时间做了一个网易云音乐的小项目。一开始觉得项目比较小，没必要用vuex所以就没有使用，但是后来发现数据流传输有点麻烦，后续会使用vuex。</p>
-          <p>####<strong>技术栈</strong></p>
+          <h1 id="-">移动端现状</h1>
+          <h2 id="-">背景</h2>
+          <p>由于公司重构采用m端和pc端分离式开发，故考虑使用一种具有屏幕尺寸兼容性高的布局方法。</p>
+          <h2 id="-">目的</h2>
           <ul>
-            <li>vue+vue-router（核心框架）</li>
-            <li><a href="https://github.com/ustbhuangyi/better-scroll">better-scroll</a>（使移动端滑动体验更加流畅）</li>
-            <li><a href="https://www.npmjs.com/package/vue-lazyload">vue-lazyload</a>（用户图片懒加载）</li>
-            <li><a href="https://www.npmjs.com/package/nprogress">nprogress</a>（用于加载过渡）</li>
-            <li><a href="https://www.npmjs.com/package/axios"> axios</a>（请求）</li>
+            <li>了解移动端web开发的问题</li>
+            <li>做开发的时候需要解决什么问题</li>
           </ul>
-          <p>####<strong>功能分析与设计</strong>
-            首先我先参考了现有的一些APP的设计与开发，然后决定做了歌单和搜索两个模块，本身主要以前端为主，后端代码并没有研究，这里要感谢这位同学写的<a href="https://github.com/zvenshy/venmusic">API</a>。
-            如果你没有API也没有关系，这并不影响我们的开发，你可以写如下形式的json数据进行模拟：
-            <img src="http://img.blog.csdn.net/20170329172932380" alt="这里写图片描述"></p>
-          <p><strong>vuejs</strong></p>
-          <p>路由结构如下</p>
-          <p><img src="http://img.blog.csdn.net/20170329173152290" alt="这里写图片描述"></p>
-          <p>以下是组件</p>
-          <p><img src="http://img.blog.csdn.net/20170329173309870" alt="这里写图片描述"></p>
-          <p>1.歌单部分：
-            数据主要由API提供，源码中有具体地址。需要了解audio标签，不熟悉的同学看<a href="http://www.cnblogs.com/tianma3798/p/6033108.html">audio</a></p>
-          <p>2.搜索部分：
-            通过绑定@keydown来绑定事件，实现实时查询。</p>
-          <p><strong>better-scroll</strong></p>
-          <p>使用：
-            1.一定要用一个空层来承载</p>
-          <pre><code>&lt;div ref=&quot;helloWrapper&quot;&gt;
-    &lt;div&gt;
-    //你的代码
-    &lt;/div&gt;
-&lt;/div&gt;
+          <h2 id="-">问题</h2>
+          <h3 id="-">浏览器问题</h3>
+          <pre><code>   UC浏览器，QQ浏览器，欧朋浏览器，百度手机浏览器，360安全浏览器，谷歌浏览器，搜狗手机浏览器，猎豹浏览器，其他杂牌浏览器
+   国内的UC和QQ，百度等手机浏览器都是根据Webkit修改过来的内核，国内尚无自助研发的内核，就像国内的手机操作系统都是基于Android修改的
 </code></pre>
-          <p>2.在vue中使用前必须引入</p>
-          <pre><code>import BScroll from &#39;better-scroll&#39;;
+          <h2 id="-">设备屏幕问题</h2>
+          <pre><code>  移动端设备屏幕尺寸非常多，碎片化严重。
+   Android，很多种分辨率：480x800, 480x854, 540x960, 720x1280, 1080x1920，而且还有传说中的2K,4k屏。
+   iPhone的碎片化也加剧了：640x960, 640x1136, 750x1334, 1242x2208。
+</code></pre>
+          <h2 id="-">主流设备尺寸</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>设备</th>
+                <th>尺寸(英寸)</th>
+                <th>开发尺寸(px)</th>
+                <th>物理像素比(dpr)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>iphone3G</td>
+                <td>3.5</td>
+                <td>320*480</td>
+                <td>1.0</td>
+              </tr>
+              <tr>
+                <td>iphone4/4s</td>
+                <td>3.5</td>
+                <td>320*480</td>
+                <td>2.0</td>
+              </tr>
+              <tr>
+                <td>iphone5/5s/5c</td>
+                <td>4.0</td>
+                <td>320*568</td>
+                <td>2.0</td>
+              </tr>
+              <tr>
+                <td>HTC One M8</td>
+                <td>4.5</td>
+                <td>360*640</td>
+                <td>3.0</td>
+              </tr>
+              <tr>
+                <td>iphone6</td>
+                <td>4.7</td>
+                <td>375*667</td>
+                <td>2.0</td>
+              </tr>
+              <tr>
+                <td>Nexus 4</td>
+                <td>4.7</td>
+                <td>384*640</td>
+                <td>2.0</td>
+              </tr>
+              <tr>
+                <td>Nexus 5x</td>
+                <td>5.2</td>
+                <td>411*731</td>
+                <td>2.6</td>
+              </tr>
+              <tr>
+                <td>iphone6 Plus</td>
+                <td>5.5</td>
+                <td>414*736</td>
+                <td>3.0</td>
+              </tr>
+              <tr>
+                <td>iphoneX</td>
+                <td>5.8</td>
+                <td>375*812</td>
+                <td>3.0</td>
+              </tr>
+              <tr>
+                <td>Samsung Galaxy Note 4</td>
+                <td>5.7</td>
+                <td>480*853</td>
+                <td>3.0</td>
+              </tr>
+              <tr>
+                <td>Sony Xperia Z Ultra</td>
+                <td>6.4</td>
+                <td>540*960</td>
+                <td>2.0</td>
+              </tr>
+              <tr>
+                <td>Nexus 7 (&#39;12)</td>
+                <td>7.0</td>
+                <td>600*960</td>
+                <td>1.3</td>
+              </tr>
+              <tr>
+                <td>iPad Mini</td>
+                <td>7.9</td>
+                <td>768*1024</td>
+                <td>1.0</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>注：以上数据均参考<a href="https://www.sumaart.com/share/967.html">https://www.sumaart.com/share/967.html</a> 一个设备尺寸统计网站。 </p>
+          <p>##单位</p>
+          <pre><code>不难发现，真正决定显示效果的，是逻辑像素尺寸。为此，iOS和Android平台都定义了各自的逻辑像素单位。iOS的尺寸单位为pt，Android的尺寸单位为dp。说实话，两者其实是一回事。
 
-this.helloScroll = new BScroll(this.$refs.helloWrapper, {
-  click: true
-});
+
 </code></pre>
-          <p>一定要在数据渲染完成后使用better-scroll，</p>
-          <pre><code>this.$nextTick(() =&gt; {
-  //调用
-});
+          <p>##单位之间的换算关系随倍率变化：</p>
+          <pre><code>1倍：1pt=1dp=1px（mdpi、iPhone 3gs）
+1.5倍：1pt=1dp=1.5px（hdpi）
+2倍：1pt=1dp=2px（xhdpi、iPhone 4s/5/6）
+3倍：1pt=1dp=3px（xxhdpi、iPhone 6 plus）
+4倍：1pt=1dp=4px（xxxhdpi）
 </code></pre>
-          <p>最后上几张效果图
-            <img src="http://img.blog.csdn.net/20170329175225335?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-          <p><img src="http://img.blog.csdn.net/20170329175246881?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-          <p><img src="http://img.blog.csdn.net/20170329175301320?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-          <p>github项目地址：
-            <a href="https://github.com/hua1995116/musiccloudWebapp/">https://github.com/hua1995116/musiccloudWebapp/</a>
-            在线演示地址：
-            <a href="http://www.qiufengh.com/#/">http://www.qiufengh.com/#/</a>
-            需要改进的有很多，请大家可以多提提意见。后续我会不断改进，如果觉得还可以，请star，你们的star是我前进的动力。</p>
+          <p>注：作为前端开发不建议大家去纠结dp,dpi,pt,ppi等单位,因为它们有复杂的转换关系。</p>
+          <h2 id="-">总结</h2>
+          <p>移动web开发，也称之为H5开发，要迫切解决的问题不是技术，而是怎么去适配。</p>
 
           <div class="timer">
-            2017-03-29
+            2018-10-13
           </div>
           <!-- <div class="view-cnt">（111 人已阅）</div> -->
         </div>

@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title> debounce与throttle实现与原理</title>
+  <title> debounce与throttle实现与原理
+  </title>
   <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
   <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -20,23 +21,23 @@
     <nav class="nav">
       <ul class="title clear">
         <a href="../index.html">
-        小乐
-      </a>
+          小乐
+        </a>
         <a href="./index.html">
-        博客
-      </a>
+          博客
+        </a>
         <a href="./tag.html">
-            归档
+          归档
         </a>
         <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
         <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
         <a href="https://github.com/hua1995116/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
       </ul>
     </nav>
   </header>
@@ -46,18 +47,20 @@
         <div class="header">
           <h1>
             debounce与throttle实现与原理
+
           </h1>
         </div>
         <div class="readers">
           阅读量<span id="busuanzi_value_page_pv"></span>
         </div>
         <div class="type clear">
-          <span class="span_button"> js</span>
+          <span class="span_button"> js
+          </span>
         </div>
         <div class="content markdown-body">
           <h1 id="-">前言</h1>
-          <p>前端时间在面试中，面试官让我写一个关于input输入框，并且实时搜索的问题，我就当然用keyup事件来写，写完面试官还是挺满意的。又问我一个问题，如何减少每次输入频繁请求的性能开销。这个我就犯难了。事后，我百度了下，查到了throttle（节流）和debounce（去抖）。 我还百度到，这些事件的运用场景：
-          </p>
+          <p>前端时间在面试中，面试官让我写一个关于input输入框，并且实时搜索的问题，我就当然用keyup事件来写，写完面试官还是挺满意的。又问我一个问题，如何减少每次输入频繁请求的性能开销。这个我就犯难了。事后，我百度了下，查到了throttle（节流）和debounce（去抖）。
+            我还百度到，这些事件的运用场景：</p>
           <ul>
             <li>鼠标事件：mousemove(拖曳)/mouseover(划过)/mouseWheel(滚屏)</li>
             <li>键盘事件：keypress(基于ajax的用户名唯一性校验)/keyup(文本输入检验、自动完成)/keydown(游戏中的射击)</li>
@@ -235,7 +238,7 @@ function throttle(fn, threshhold) {
           <!-- <div class="view-cnt">（111 人已阅）</div> -->
         </div>
         <div class="my-pay">
-          <div class="my-pay-btn">赞赏</div>
+          <div class="my-pay-btn">打赏</div>
           <div class="my-pay-type clear">
             <div class="my-pay-alipay my-pay-div"></div>
             <div class="my-pay-weixin my-pay-div"></div>
@@ -261,18 +264,18 @@ function throttle(fn, threshhold) {
     <section class="person-right-content">
       <div class="person-title">
         <div class="person-title-img"></div>
-        <div class="person-title-name">蓝色的小乐</div>
+        <div class="person-title-name">秘小乐</div>
         <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
         <div class="person-title-tag">
           <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
           <a href="http://blog.csdn.net/blueblueskyhua/article/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
           <a href="https://github.com/hua1995116/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
         </div>
       </div>
       <div class="person-tag person-title clear">

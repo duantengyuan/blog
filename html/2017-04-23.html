@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title> js中事件绑定3种方法以及事件委托</title>
+  <title> js中事件绑定3种方法以及事件委托
+  </title>
   <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
   <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -20,23 +21,23 @@
     <nav class="nav">
       <ul class="title clear">
         <a href="../index.html">
-        小乐
-      </a>
+          小乐
+        </a>
         <a href="./index.html">
-        博客
-      </a>
+          博客
+        </a>
         <a href="./tag.html">
-            归档
+          归档
         </a>
         <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
         <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
         <a href="https://github.com/hua1995116/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
       </ul>
     </nav>
   </header>
@@ -46,16 +47,19 @@
         <div class="header">
           <h1>
             js中事件绑定3种方法以及事件委托
+
           </h1>
         </div>
         <div class="readers">
           阅读量<span id="busuanzi_value_page_pv"></span>
         </div>
         <div class="type clear">
-          <span class="span_button"> js</span>
+          <span class="span_button"> js
+          </span>
         </div>
         <div class="content markdown-body">
-          <p>###事件绑定 首先，我先来介绍我们平时绑定事件的三种方法。
+          <p>###事件绑定
+            首先，我先来介绍我们平时绑定事件的三种方法。
             <strong>1.嵌入dom</strong></p>
           <pre><code class="lang-html">&lt;button onclick=&quot;open()&quot;&gt;按钮&lt;/button&gt;
 
@@ -86,7 +90,8 @@ document.getElementById(&#39;btn&#39;).attachEvent(&#39;click&#39;,function(){
 })
 &lt;/script&gt;
 </code></pre>
-          <p>###事件委托 对“事件处理程序过多”问题的解决方案就是事件委托。事件委托利用了事件冒泡，只制定一个事件处理程序，就可以管理某一类型的所有事件。例如click事件一直会冒泡到document层。也就是我们可以只指定onclick事件处理程序，而不必给每个事件分别添加处理程序。
+          <p>###事件委托
+            对“事件处理程序过多”问题的解决方案就是事件委托。事件委托利用了事件冒泡，只制定一个事件处理程序，就可以管理某一类型的所有事件。例如click事件一直会冒泡到document层。也就是我们可以只指定onclick事件处理程序，而不必给每个事件分别添加处理程序。
             <strong>下面我们来看一个阿里巴巴笔试题的例子。</strong></p>
           <p><img src="http://img.blog.csdn.net/20170423134519975" alt="这里写图片描述"></p>
           <p><strong>样式以及DOM结构</strong></p>
@@ -185,7 +190,7 @@ new Contact();
           <!-- <div class="view-cnt">（111 人已阅）</div> -->
         </div>
         <div class="my-pay">
-          <div class="my-pay-btn">赞赏</div>
+          <div class="my-pay-btn">打赏</div>
           <div class="my-pay-type clear">
             <div class="my-pay-alipay my-pay-div"></div>
             <div class="my-pay-weixin my-pay-div"></div>
@@ -211,18 +216,18 @@ new Contact();
     <section class="person-right-content">
       <div class="person-title">
         <div class="person-title-img"></div>
-        <div class="person-title-name">蓝色的小乐</div>
+        <div class="person-title-name">秘小乐</div>
         <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
         <div class="person-title-tag">
           <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
           <a href="http://blog.csdn.net/blueblueskyhua/article/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
           <a href="https://github.com/hua1995116/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
         </div>
       </div>
       <div class="person-tag person-title clear">

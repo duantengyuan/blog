@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <title> vue-chat项目之重构与体验优化</title>
+  <title> vue-chat项目之重构与体验优化
+  </title>
   <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
   <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
   <link rel="stylesheet" type="text/css" href="../css/style.css">
@@ -20,23 +21,23 @@
     <nav class="nav">
       <ul class="title clear">
         <a href="../index.html">
-        小乐
-      </a>
+          小乐
+        </a>
         <a href="./index.html">
-        博客
-      </a>
+          博客
+        </a>
         <a href="./tag.html">
-            归档
+          归档
         </a>
         <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
         <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
         <a href="https://github.com/hua1995116/" class="big-media">
-        <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
-      </a>
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
       </ul>
     </nav>
   </header>
@@ -46,30 +47,39 @@
         <div class="header">
           <h1>
             vue-chat项目之重构与体验优化
+
           </h1>
         </div>
         <div class="readers">
           阅读量<span id="busuanzi_value_page_pv"></span>
         </div>
         <div class="type clear">
-          <span class="span_button"> vue</span><span class="span_button"> 重构</span><span class="span_button"> 优化</span>
+          <span class="span_button"> vue</span><span class="span_button"> 重构</span><span class="span_button"> 优化
+          </span>
         </div>
         <div class="content markdown-body">
           <h1 id="-">前言</h1>
-          <p>vue-chat 也就是我的几个月之前写的一个基于vue的实时聊天项目，到目前为止已经快满400star了，注册量也已经超过了1700+，消息量达2000+，由于一直在实习，没有时间对它频繁地更新，趁着这个国庆，对他进行了一次重构，希望我的经验对大家有帮助。有宝贵的意见请在issue提给我。 旧版本：
-            <a href="https://github.com/hua1995116/webchat/tree/v1.2.0">https://github.com/hua1995116/webchat/tree/v1.2.0</a> 新版本：
-            <a href="https://github.com/hua1995116/webchat/tree/dev">https://github.com/hua1995116/webchat/tree/dev</a> 可以说这也是一个稳定版本，但是代码细节方面存在许多的不堪。 所以我从以下几个大方面进行了优化 线上地址：
-            <a href="http://www.qiufengh.com:9090/#/">http://www.qiufengh.com:9090/#/</a></p>
+          <p>vue-chat 也就是我的几个月之前写的一个基于vue的实时聊天项目，到目前为止已经快满400star了，注册量也已经超过了1700+，消息量达2000+，由于一直在实习，没有时间对它频繁地更新，趁着这个国庆，对他进行了一次重构，希望我的经验对大家有帮助。有宝贵的意见请在issue提给我。
+            旧版本：
+            <a href="https://github.com/hua1995116/webchat/tree/v1.2.0">https://github.com/hua1995116/webchat/tree/v1.2.0</a>
+            新版本：
+            <a href="https://github.com/hua1995116/webchat/tree/dev">https://github.com/hua1995116/webchat/tree/dev</a>
+            可以说这也是一个稳定版本，但是代码细节方面存在许多的不堪。
+            所以我从以下几个大方面进行了优化
+            线上地址：<a href="http://www.qiufengh.com:9090/#/">http://www.qiufengh.com:9090/#/</a></p>
           <p>前面两个版本的介绍：
             <a href="http://blog.csdn.net/blueblueskyhua/article/details/70807847">vue+websocket+express+mongodb实战项目（实时聊天）（一）</a>
             <a href="http://blog.csdn.net/blueblueskyhua/article/details/73250992">vue+websocket+express+mongodb实战项目（实时聊天）（二）</a></p>
           <h1 id="-">代码结构</h1>
           <p><strong>1.梳理项目目录结构</strong></p>
           <p>原目录：
-            <img src="http://img.blog.csdn.net/20171004214519486?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"> 新目录
-            <img src="http://img.blog.csdn.net/20171004214547851?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"> 主要是多了一个api目录，view目录和一个Basetransition.vue文件。
-            api的作用为对axios的统一处理 view使得页面和组件分离，因为一般写都是混在一起，会导致不太清楚 Basetransition.vue为一个切换特效的基本文件
-          </p>
+            <img src="http://img.blog.csdn.net/20171004214519486?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述">
+            新目录
+            <img src="http://img.blog.csdn.net/20171004214547851?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述">
+            主要是多了一个api目录，view目录和一个Basetransition.vue文件。
+            api的作用为对axios的统一处理
+            view使得页面和组件分离，因为一般写都是混在一起，会导致不太清楚
+            Basetransition.vue为一个切换特效的基本文件</p>
           <p><strong>2.对每个页面的结构进行整改</strong></p>
           <p>这里不细说，具体看每个页面，主要是对一些可以在单页内使用的data，去除了vuex。使得每个页面具有其通用性，去除了耦合性。</p>
           <p><strong>3.将公共工具utils抽取出来</strong></p>
@@ -79,8 +89,8 @@
             <strong>4.页面与组件分离</strong></p>
           <p>刚才讲了，将components 分离出来，分离成真正的组件以及页面。</p>
           <p><strong>5.axios进行了统一的处理</strong></p>
-          <p>api下的axios.js对axios进行了统一的处理 包括，响应出错，响应超时
-          </p>
+          <p>api下的axios.js对axios进行了统一的处理
+            包括，响应出错，响应超时</p>
           <pre><code class="lang-javascript">import axios from &#39;axios&#39;
 
 const baseURL = &#39;&#39;
@@ -117,8 +127,8 @@ instance.interceptors.response.use(response =&gt; {
 export default instance
 </code></pre>
           <p><strong>6.运用了async await，ES7的特性</strong></p>
-          <p>大量运用了async/await 新特性，使得更好的处理异步，使得代码更加简化，例如，处理首页是否登录 src/view/loan.vue
-          </p>
+          <p>大量运用了async/await 新特性，使得更好的处理异步，使得代码更加简化，例如，处理首页是否登录
+            src/view/loan.vue</p>
           <pre><code class="lang-javascript">async mounted() {
   const uerId = getItem(&#39;userid&#39;)
   if (!uerId) {
@@ -134,8 +144,9 @@ export default instance
 </code></pre>
           <h1 id="-">代码性能</h1>
           <p><strong>1.压缩所有图片</strong></p>
-          <p>利用 <a href="https://tinypng.com/">https://tinypng.com/</a> 进行了对所有图片的压缩，以及手动对一些尺寸大的图片进行压缩， 例如，项目中只需要用到80
-            <em>80像素的图片，实际上服务器传了一张200</em>200的，所以手动进行了对图片调整。</p>
+          <p>利用 <a href="https://tinypng.com/">https://tinypng.com/</a>
+            进行了对所有图片的压缩，以及手动对一些尺寸大的图片进行压缩，
+            例如，项目中只需要用到80<em>80像素的图片，实际上服务器传了一张200</em>200的，所以手动进行了对图片调整。</p>
           <p><strong>2.所有请求，统一采用先加载页面，再进行请求，体验优化</strong></p>
           <p>在之前的版本，是让请求和切换页面同时进行，所以在切换的过程过，会出现卡顿的现象。。现在，我将移到了页面的mounted中，并且加入了loading动画，为了展示loading动画，特别搞了点小动作，因为我们的项目“太快了“！！“太快了“！！“太快了“！！，我怕你们看不到这个动画。以下src/view/chat.vue为例子，删除了一些不利于阅读的代码。</p>
           <pre><code class="lang-javascript">mounted() {
@@ -202,11 +213,13 @@ export default instance
           <p>4.加入静态组件，仿苹果弹窗(Alert, confirm)</p>
           <p><img src="http://img.blog.csdn.net/20171005164102567?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
           <p>5.加入用户缓存机制，不必每次刷新重新登录了</p>
-          <p>我们可以使用utils下的localStorage.js，setItem这个函数， setItem(key, value, duration)，参数分别为，属性名，属性值，缓存时长。</p>
+          <p>我们可以使用utils下的localStorage.js，setItem这个函数，
+            setItem(key, value, duration)，参数分别为，属性名，属性值，缓存时长。</p>
           <p>6.增加历史记录功能</p>
           <p>下面的历史记录也可以查看啦。</p>
           <h1 id="-">对比</h1>
-          <p>因为服务器比较渣，所以还是能体谅这个速度，我们主要看前后对比时间。 重构前：
+          <p>因为服务器比较渣，所以还是能体谅这个速度，我们主要看前后对比时间。
+            重构前：
             <img src="http://img.blog.csdn.net/20171005164707947?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
           <p><img src="http://img.blog.csdn.net/20171005164824106?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
           <p>重构后：
@@ -220,7 +233,7 @@ export default instance
           <!-- <div class="view-cnt">（111 人已阅）</div> -->
         </div>
         <div class="my-pay">
-          <div class="my-pay-btn">赞赏</div>
+          <div class="my-pay-btn">打赏</div>
           <div class="my-pay-type clear">
             <div class="my-pay-alipay my-pay-div"></div>
             <div class="my-pay-weixin my-pay-div"></div>
@@ -246,18 +259,18 @@ export default instance
     <section class="person-right-content">
       <div class="person-title">
         <div class="person-title-img"></div>
-        <div class="person-title-name">蓝色的小乐</div>
+        <div class="person-title-name">秘小乐</div>
         <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
         <div class="person-title-tag">
           <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
           <a href="http://blog.csdn.net/blueblueskyhua/article/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
           <a href="https://github.com/hua1995116/">
-          <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
-        </a>
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
         </div>
       </div>
       <div class="person-tag person-title clear">
