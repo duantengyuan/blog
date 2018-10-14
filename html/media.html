@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        /*现在的设计稿为750px 现在的基准值为100px*/
+        html{
+            font-size: 100px;
+        }
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        /*假设在设计稿量取的 750px*100px 字体大小48px */
+        .header{
+            width: 100%;
+            height: 1rem;
+            font-size: 0.48rem;
+            text-align: center;
+            line-height: 1rem;
+            background: green;
+            color: #fff;
+        }
+        /*媒体查询修改基准值*/
+        /*知道设备的尺寸 320 360 375 384 414 .... 适配主流设备10几种*/
+        @media (min-width: 320px) {
+            html{
+                font-size: 42.66666666666667px;
+            }
+        }
+        @media (min-width: 360px) {
+            html{
+                font-size: 48px;
+            }
+        }
+        @media (min-width: 375px) {
+            html{
+                font-size: 50px;
+            }
+        }
+        @media (min-width: 750px) {
+            html{
+                font-size: 100px;
+            }
+        }
+        /*在計算rem的基準值的時候不能運算*/
+    </style>
+</head>
+<body>
+<div class="header">我的dome</div>
+</body>
+</html>

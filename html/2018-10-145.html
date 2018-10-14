@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> rem适配方案</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../index.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="http://blog.csdn.net/blueblueskyhua/article/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://github.com/hua1995116/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            rem适配方案
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"></span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="rem-">rem适配方案</h1>
+          <h2 id="rem-">rem的适配原理</h2>
+          <ul>
+            <li>rem 是相对于页面根源素html的字体大小的一个尺寸单位</li>
+            <li>页面内容可以使用rem为单位，那么html的字体大小就是一个控制尺寸的开关</li>
+            <li>当设备改变的时候可以根据设备的宽度和原本设计稿的尺寸比例关系设置html的字体大小</li>
+            <li>这样凡是以rem为单位的内容会根据设备做等比适配</li>
+          </ul>
+          <pre><code class="lang-text">    1.假设设计稿是750px
+    2.假设这个时候html字体大小为100px
+    3.那么在320px设备的时候  字体大小为 100/750*320
+    4.只要根据这个比例在不同设备设置rem基准值(html字体大小)即可
+    5.改变rem基准值有两种方式：媒体查询或javascript
+</code></pre>
+          <p>####dome</p>
+          <p><a href="https://duantengyuan.github.io/blog/rem">https://duantengyuan.github.io/blog/rem</a></p>
+          <h2 id="rem-">rem+媒体查询</h2>
+          <pre><code class="lang-css">/*假设的设备  320px 414px 640px */
+@media (min-width: 320px) {
+    html{
+        font-size: 50px;
+    }
+}
+@media (min-width: 414px) {
+    html{
+        font-size: 64.6875px;
+    }
+}
+@media (min-width: 640px) {
+    html{
+        font-size: 100px;
+    }
+}
+</code></pre>
+          <p>####dome</p>
+          <p><a href="https://duantengyuan.github.io/blog/media">https://duantengyuan.github.io/blog/media</a></p>
+          <h2 id="rem-flexible-js">rem+flexible.js</h2>
+          <ul>
+            <li>flexible.js 是手机淘宝团队做移动端适配的库</li>
+            <li>我们使有它的目的只有一个根据设备设置rem基准值</li>
+          </ul>
+          <pre><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, user-scalable=no, initial-scale=.0&quot;&gt;
+&lt;script src=&quot;flexible.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+          <h2 id="-vue-rem-flexible-js-">基于vue的rem+flexible.js可维护方案</h2>
+          <p><a href="https://blog.csdn.net/museions/article/details/80425547">https://blog.csdn.net/museions/article/details/80425547</a></p>
+          <h2 id="-">总结</h2>
+          <p>使用rem完成页面的适配，注意不一定全部都是rem,大布局的适配还是可以使用流失布局或者伸缩布局。</p>
+
+          <div class="timer">
+            2018-10-145
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5964cb3a6fb9a06bb0194421">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="http://blog.csdn.net/blueblueskyhua/article/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://github.com/hua1995116/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <div class="blog-bottom">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>
