@@ -3,7 +3,7 @@
 一个自动化构建的博客。
 
 ```Git
-git clone https://github.com/hua1995116/myblog
+git clone https://duantengyuan.github.io/blog/myblog
 ```
 
 将需要写的.md文件放到notes目录下，

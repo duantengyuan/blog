@@ -275,12 +275,12 @@ body {
 }
 
 .my-pay-alipay {
-  background-image: url('http://picture-hyf.oss-cn-beijing.aliyuncs.com/IMG_2007.JPG');
+  background-image: url('../images/zhifubao.jpg');
   background-position: 0 -59px;
 }
 
 .my-pay-weixin {
-  background-image: url('http://picture-hyf.oss-cn-beijing.aliyuncs.com/IMG_2006.JPG');
+  background-image: url('../images/weixin.jpg');
   background-position: 0 0px;
 }
 

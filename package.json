@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hua1995116/myblog.git"
+    "url": "git+https://duantengyuan.github.io/blog/myblog.git"
   },
   "author": "huayifeng<qiufenghyf@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/hua1995116/myblog/issues"
+    "url": "https://duantengyuan.github.io/blog/myblog/issues"
   },
-  "homepage": "https://github.com/hua1995116/myblog#readme",
+  "homepage": "https://duantengyuan.github.io/blog/myblog#readme",
   "dependencies": {
     "express": "^4.16.2",
     "js-beautify": "^1.7.4",
