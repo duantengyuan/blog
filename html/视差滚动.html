@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Q</title>
+    <link rel="stylesheet" href="css/index.css">
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+    <style>
+    *{
+    margin: 0;
+    padding: 0;
+}
+.header{
+    height: 150px;
+    background: #ccc;
+}
+.product{
+    height: 600px;
+    background: #111;
+}
+.content{
+    height: 400px;
+    background: #ccc;
+}
+.sound{}
+.sound h1{
+    height: 300px;
+    background: url("../images/interest-bg.jpg") no-repeat center / cover;
+}
+.sound .sound_bg{
+    height: 600px;
+    background: url("../images/sound-bg.jpg") no-repeat center / cover;
+    background-attachment: fixed;
+}
+.file .file_bg{
+    height: 600px;
+    background: url("../images/file-bg.jpg") no-repeat center / cover;
+    background-attachment: fixed;
+}
+.interest .interest_bg{
+    height: 600px;
+    background: url("../images/interest-bg.jpg") no-repeat center / cover;
+    background-attachment: fixed;
+}
+
+.footer{
+    height: 300px;
+    background: #333;
+}
+    </style>
+</head>
+<body>
+
+<header class="header"></header>
+<!--产品区域-->
+<div class="product"></div>
+
+<section class="sound">
+    <h1></h1>
+    <div class="sound_bg" data-stellar-background-ratio="0.3"></div>
+    <div class="content"></div>
+</section>
+
+<section class="file">
+    <div class="file_bg" data-stellar-background-ratio="0.3"></div>
+    <div class="content"></div>
+</section>
+
+<section class="interest">
+    <div class="interest_bg" data-stellar-background-ratio="0.3"></div>
+    <div class="content"></div>
+</section>
+
+<footer class="footer"></footer>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.stellar.min.js"></script>
+<script>
+//使用 stellar 插件
+/*1. 下载：https://github.com/markdalgleish/stellar.js*/
+/*2. 下载之后 jquery.stellar.js 基于jquery插件*/
+/*3. 先依赖jquery */
+/*4. 引入文件*/
+/*5. 需要设置  背景的元素为 background-attachment:fixed */
+/*6. 需要设置  背景的滚动的速度  data-stellar-background-ratio="0.3" */
+/*7. 初始化*/
+$(function(){
+    $.stellar({
+        horizontalScrolling:false,//配置横向滚动没有视差效果
+        responsive:true //当页面尺寸发生改变 重新初始化插件
+    });
+});
+</script>
+</body>
+</html>
