@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> 抽奖滚动展示
+  </title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../index.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            抽奖滚动展示
+
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button"> marquee
+          </span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="-">做一个滚动插件</h1>
+          <h3 id="-vuejs-">基于vuejs的一个模拟抽奖结果的滚动插件，小程序同理</h3>
+          <p>话不多说，上代码（lang=“pug”）</p>
+          <p>ps：marquee标签是换H5特有的标签，在小程序中不支持，故小程序里我们用swiper标签来代替，效果相似不相同，有兴趣的同学可以分别试一试</p>
+          <pre><code class="lang-html">#lottery
+  .scroll
+    .ctitle
+      | 邀请 
+      span 5
+      |  人，立刻免费领取15分钟
+    button
+      | 邀请好友
+    marquee.grad(marquee direction=&quot;up&quot;,scrollamount=&quot;3&quot;)    
+      ul#roll-ul
+        li(v-for=&#39;item,index in studentlist&#39;, :key=&#39;index&#39;)
+          span.name {{item.name}}
+          span.site 已免费领取
+          span.gsmc {{item.site}}
+  .memberbox
+    img(src=&#39;../../views/case/img/student4-logo.jpg&#39;, alt=&#39;&#39;)
+    span.name {{citem.name}}
+
+小程序的dom结构：
+  &lt;view&gt;
+    &lt;view class=&quot;scroll&quot;&gt;
+    &lt;view class=&quot;title&quot;&gt;邀请 &lt;span&gt;5&lt;/span&gt; 人，立刻免费领取15分钟&lt;/view&gt;
+      &lt;button&gt;
+        邀请好友
+      &lt;/button&gt;
+      &lt;swiper class=&quot;grad&quot; vertical=&quot;true&quot; autoplay=&quot;true&quot; circular=&quot;true&quot; interval=&quot;2000&quot; display-multiple-items=&#39;3&#39;&gt;
+        &lt;ul id=&quot;roll-ul&quot;&gt;
+          &lt;li&gt;
+            &lt;repeat for=&quot;{{list}}&quot; key=&quot;index&quot; index=&quot;index&quot; item=&quot;item&quot;&gt;            
+            &lt;swiper-item&gt;
+              &lt;span class=&quot;name&quot;&gt;{{item.name}}&lt;/span&gt;
+              &lt;span class=&quot;site&quot;&gt;已免费领取&lt;/span&gt;
+              &lt;span class=&quot;gsmc&quot;&gt;{{item.site}}&lt;/span&gt;
+            &lt;/swiper-item&gt;
+            &lt;/repeat&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/swiper&gt;
+    &lt;view id=&quot;grad&quot;&gt;&lt;/view&gt;
+    &lt;/view&gt;
+</code></pre>
+          <p>css部分（lang=“scss”）</p>
+          <pre><code class="lang-css">#lottery{
+.scroll{
+  background: #FFFEFF;
+  box-shadow: 0px 2px 24px 0px rgba(0,0,0,0.20);
+  width: 690px;
+  height: 624px;
+  margin: 0 auto;
+  border-radius: 9px;
+  padding:92px 34px; 
+  .ctitle{
+    text-align: center;
+    font-family: &#39;PingFangSC-Semibold&#39;;
+    color: #171417;
+    font-size: 32px;
+    font-weight: 600;
+    span{
+      color: #D63232;
+    }
+  }
+   button{
+    border: none;
+    display: block;
+    width: 622px;
+    height: 92px;
+    background: #007AFF;
+    border-radius:0px;
+    margin-top: 60px;
+    font-family: &#39;PingFangSC-Semibold&#39;;
+    color: #FFFEFF;
+    letter-spacing: 1.8;
+    font-size: 32px;
+  }
+  .grad{
+    width: 580px;
+    height: 180px;
+    margin: 0 auto;
+    margin-top: 40px;
+    font-size: 24px;
+    overflow: hidden;
+    position: relative;
+  &amp;:after{
+    content: &#39;&#39;;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 580px;
+    height: 180px;
+    background: linear-gradient(white,rgba(0,0,0,0),white); /* 标准的语法 */
+  }
+  }
+
+li{
+  margin-bottom: 30px;
+  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  span:nth-child(3){
+    width: 100px;  
+  }
+}
+}
+</code></pre>
+          <p>js部分就是一个写死的json，也可以接口获取渲染，看你自己</p>
+          <pre><code>  data () {
+    return {
+      studentlist: [
+        { &#39;name&#39;: &#39;于 * *&#39;, &#39;site&#39;: &#39;刚刚&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;张 * *&#39;, &#39;site&#39;: &#39;刚刚&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;杨 * *&#39;, &#39;site&#39;: &#39;刚刚&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;马 * *&#39;, &#39;site&#39;: &#39;刚刚&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;王 * *&#39;, &#39;site&#39;: &#39;刚刚&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;梁 * *&#39;, &#39;site&#39;: &#39;刚刚&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;万 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;李 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;冯 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;刘 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;强 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;秘 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;翟 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;赵 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;商 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;周 * *&#39;, &#39;site&#39;: &#39;1分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;吴 * *&#39;, &#39;site&#39;: &#39;3分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;王 * *&#39;, &#39;site&#39;: &#39;3分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;沈 * *&#39;, &#39;site&#39;: &#39;3分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;赵 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;邹 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;吴 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;王 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;曹 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;王 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;李 * *&#39;, &#39;site&#39;: &#39;6分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;武 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;马 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;范 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;周 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;郝 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;任 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; },
+        { &#39;name&#39;: &#39;张 * *&#39;, &#39;site&#39;: &#39;8分钟前&#39;, &#39;gsmc&#39;: &#39;&#39; }
+      ]
+    }
+</code></pre>
+          <p>然后你可以把它封装成一个组件，引用它。</p>
+          <p>现在，我展示一个静态的h5 demo</p>
+          <p><a href="https://duantengyuan.github.io/blog/html/%E8%A7%86%E5%B7%AE%E6%BB%9A%E5%8A%A8">https://duantengyuan.github.io/blog/html/lottery</a></p>
+
+          <div class="timer">
+            2018-12-06
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <div class="blog-bottom">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>

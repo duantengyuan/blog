@@ -8,7 +8,7 @@ html {
 body {
   width: 100%;
   height: 100%;
-  background: #fff0f0;
+  background: #d7e1ee;
   font-size: "Tahoma","Helvetica Neue","Helvetica","Lucida Grande","Lantinghei SC","Open Sans","Microsoft YaHei",sans-serif;
   color: #444;
 }
@@ -37,8 +37,8 @@ body {
 .person-title {
   padding: 10px;
   background: #fff;
-  -webkit-box-shadow: 0px 0px 5px 0px #e8c4c4;
-  box-shadow: 0px 0px 5px 0px #e8c4c4;
+  -webkit-box-shadow: 0px 0px 5px 0px #fff;
+  box-shadow: 0px 0px 5px 0px #fff;
 }
 
 .person-title-img {
@@ -132,24 +132,36 @@ body {
 
 /*列表*/
 
+  /* 骚气且统一的卡片动画 */
+  .gec-hover-card {
+    transition: all .5s cubic-bezier(0.46, -1.96, 0.29, 1.14);
+    box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, .2);
+  }
+
+  .gec-hover-card:hover {
+    box-shadow: 2px 4px 8px 0 rgba(46, 61, 73, .2);
+  }
+
 .list {
   position: relative;
   background: #fff;
   padding: 2rem 1rem;
   margin: 1rem auto;
-  -webkit-box-shadow: 0px 0px 5px 0px #e8c4c4;
-  box-shadow: 0px 0px 5px 0px #e8c4c4;
+  -webkit-box-shadow: 0px 0px 5px 0px #fff;
+  box-shadow: 0px 0px 5px 0px #fff;
+  cursor: pointer;
 }
 
 .list h1 {
   margin-bottom: 20px;
   font-size: 1.2rem;
-  color: #c79696;
+  color: #2466bd;
 }
 
-.list h1:hover {
+.list:hover h1 {
   color: #c3b3b3;
 }
+
 
 /*阅读量*/
 
@@ -168,22 +180,24 @@ body {
 
 .span_button {
   font-size: 1rem;
-  background: #bfb99b;
+  background: #a0c1eb;
   color: #EFEFEF;
-  padding: 0.3rem 0.6rem 0.2rem 0.6rem;
+  padding: .6rem 1rem;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
   display: inline-block;
   -webkit-border-radius: 0.3em;
   border-radius: 0.3em;
-  -webkit-box-shadow: 1px 1px 5px 0px #ddd;
-  box-shadow: 1px 1px 5px 0px #ddd;
-  font-family: Consolas, "Courier New", Courier;
-  font-size: 0.9rem;
+  -webkit-box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, .2);
+  box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, .2);
+  font-size: .8rem;
   text-shadow: none;
   -webkit-transition-duration: 0.5s;
   transition-duration: 0.5s;
   font-weight: bold;
+}
+.list:hover .span_button {
+  box-shadow: 0px 0px 0px 0 rgba(46, 61, 73, .2);
 }
 
 
@@ -317,13 +331,13 @@ body {
   background: #fff;
   padding: 2rem 2rem;
   margin: 1rem auto;
-  -webkit-box-shadow: 0px 0px 5px 0px #e8c4c4;
-  box-shadow: 0px 0px 5px 0px #e8c4c4;
+  -webkit-box-shadow: 0px 0px 5px 0px #2466bd;
+  box-shadow: 0px 0px 5px 0px #2466bd;
 }
 .detail-content h1 {
   margin-bottom: 20px;
   font-size: 1.2rem;
-  color: #c79696;
+  color: #2466bd;
 }
 
 .detail-content h1:hover {

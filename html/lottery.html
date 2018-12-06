@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+div{
+  box-sizing: border-box;
+}
+.scroll{
+  background: #FFFEFF;
+  box-shadow: 0px 2px 24px 0px rgba(0,0,0,0.20);
+  width: 690px;
+  height: 624px;
+  margin: 0 auto;
+  border-radius: 9px;
+  padding:92px 34px; 
+}
+  .ctitle{
+    text-align: center;
+    font-family: 'PingFangSC-Semibold';
+    color: #171417;
+    font-size: 32px;
+    font-weight: 600;
+  }
+  .ctitle span{
+      color: #D63232;
+    }
+  
+   button{
+    border: none;
+    display: block;
+    width: 622px;
+    height: 92px;
+    background: #007AFF;
+    border-radius:0px;
+    margin-top: 60px;
+    font-family: 'PingFangSC-Semibold';
+    color: #FFFEFF;
+    letter-spacing: 1.8;
+    font-size: 32px;
+  }
+  .grad{
+    width: 580px;
+    height: 180px;
+    margin: 0 auto;
+    margin-top: 40px;
+    font-size: 24px;
+    overflow: hidden;
+    position: relative;
+
+  }
+  .grad:after{
+    content: '';
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    width: 580px;
+    height: 184px;
+    background: linear-gradient(white,rgba(0,0,0,0),white); /* 标准的语法 */
+  }
+  
+
+li{
+  margin-bottom: 30px;
+  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+ li span:nth-child(3){
+    width: 100px;  
+  }
+
+  </style>
+</head>
+<body>
+  <div id="lottery">
+    <div class="scroll">
+      <div class="ctitle">邀请 <span>5</span> 人，立刻免费领取15分钟</div>
+      <button>邀请好友</button>
+      <marquee class="grad" marquee="marquee" direction="up" scrollamount="3">
+        <ul id="roll-ul">
+          <li><span class="name">name1</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name2</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name3</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name4</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name5</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name6</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name7</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name8</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name9</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name10</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name11</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name12</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name13</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name14</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name15</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name16</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name17</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name18</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+          <li><span class="name">name19</span><span class="site">已免费领取</span><span class="gsmc">刚刚</span></li>
+        </ul>
+      </marquee>
+    </div>
+  </div>
+</body>
+</html>
