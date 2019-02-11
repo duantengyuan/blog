@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> query传参</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../index.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            query传参
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button">query</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="query-">query传参</h1>
+          <h2 id="-">背景</h2>
+          <p>最近公司项目重构，没有太多的空余的时间来更博（好吧，我就是懒），然后我们今天来复盘一下我在上个星期遇到的一个问题：</p>
+          <p><img src="../images/20181101.png" alt=""></p>
+          <h4 id="-">阐述：</h4>
+          <p>这是一个简单的扫码绑定微信功能，浏览者注册为网站用户后，服务器会传过来一个userid，通过这个userid，微信的接口会生成一个专有的二维码，用户扫码成功绑定微信后自动登录到网站</p>
+          <p>####问题</p>
+          <p>路由传参，register先传到父组件registerPage上，再传到WXloginPage上保留，再传到WXqrcode上？vuex？</p>
+          <h2 id="-">解决办法</h2>
+          <p>vue中有这样的一个方法：</p>
+          <p>当传递数组给 query 参数时，URL 语法不再是 <code>/foo?users[]=Tom&amp;users[]=Jerry</code>，取而代之，新语法是 <code>/foo?users=Tom&amp;users=Jerry</code>，此时 <code>$route.query.users</code> 将仍旧是一个数组，不过如果在该 query 中只有一个参数：<code>/foo?users=Tom</code>，当直接访问该路由时，vue-router 将无法知道我们期待的 <code>users</code> 是个数组。因此，可以考虑添加一个计算属性并且在每个使用 <code>$route.query.users</code> 的地方以该计算属性代替：</p>
+          <pre><code>export default {
+  // ...
+  computed: {
+    // 此计算属性将始终是个数组
+    users () {
+      const users = this.$route.query.users
+      return Array.isArray(users) ? users : [users]
+    }
+  }
+}
+</code></pre>
+          <p>from:</p>
+          <p><a href="https://cn.vuejs.org/v2/guide/migration-vue-router.html#URL-%E4%B8%AD%E7%9A%84-Query-%E6%95%B0%E7%BB%84-%E8%AF%AD%E6%B3%95-%E7%A7%BB%E9%99%A4">https://cn.vuejs.org/v2/guide/migration-vue-router.html#URL-%E4%B8%AD%E7%9A%84-Query-%E6%95%B0%E7%BB%84-%E8%AF%AD%E6%B3%95-%E7%A7%BB%E9%99%A4</a></p>
+          <h2 id="my-code">My code</h2>
+          <p>所以我的解决办法是：</p>
+          <p>在register.vue中</p>
+          <pre><code class="lang-html"> this.$router.push({ path: &#39;qrcode&#39;, query: { canSkip: true, id: res.data.id } })
+</code></pre>
+          <p>在login.vue中</p>
+          <pre><code>export default {
+  name: &#39;login&#39;,
+  components: {
+    loginPage, registerPage, qrcodePage, fillInfo, aberrantPage, forgetPage
+  },
+  data () {
+    return {
+      query: null,
+      canSkip: null,
+      id: null,
+      ignoreCode: false
+    }
+  },
+  mounted () {
+    this.query = this.$route.query
+    this.canSkip = this.query.canSkip
+    this.id = this.query.id
+  },
+  methods: {
+    ignore () {
+      this.$router.push(&#39;/login&#39;)
+    }
+  }
+}
+</code></pre>
+          <p>同样的，在qrcode中也能通过<code>this.$route.query.id</code>取到</p>
+          <h2 id="-">注意</h2>
+          <p>query要用path来引入，params要用name来引入，接收参数都是类似的，分别是<code>this.$route.query.name</code>和<code>this.$route.params.name</code>。</p>
+          <p>注意接收参数的时候，已经是<code>$route</code>而不是<code>$router</code>了哦！！</p>
+
+          <div class="timer">
+            2018-11-01
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <div class="blog-bottom">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>

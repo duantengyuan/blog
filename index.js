@@ -152,7 +152,7 @@ function handlePromise(filename) {
 
 function handleTagLoop(tag) {
   let tagintoHTML = '';
-  let tagList = tag.split(',');
+  let tagList = (tag || "").split(',');
   for (let i = 0; i < tagList.length; i++) {
     tagintoHTML += `<span class="span_button">${tagList[i]}</span>`;
   }
