@@ -161,7 +161,7 @@ function handleTagLoop(tag) {
 
 function handleToJson(fileName, title, tag, description, date) {
   const time = new Date(fileName).getTime();
-  url.push(`http://yifenghua.win/html/${fileName}.html`);
+  url.push(`/html/${fileName}.html`);
   arr.push({
     fileName: `${fileName}.html`,
     title,
