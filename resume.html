@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>个人简介</title>
+<!-- <link rel="stylesheet" href="./css/main.css" /> -->
+<script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.7.2/animate.css" />
+<script>
+    var _hmt = _hmt || [];
+</script>
+<script src="https://hm.baidu.com/hm.js?4b16c28d455429f59e9f6e84f3d4efe6"></script>
+  <link rel="stylesheet" src="https://cdn.bootcss.com/fullPage.js/2.9.7/jquery.fullpage.min.css" href="">
+  <script src="https://cdn.bootcss.com/fullPage.js/2.9.7/jquery.fullpage.js"></script> 
+  <script src="https://cdn.bootcss.com/fullPage.js/2.9.7/vendors/scrolloverflow.js"></script> 
+  <style>
+@-webkit-keyframes Glow {
+  from {
+      text-shadow: 0 0 10px #fff,
+                   0 0 20px #fff,
+                   0 0 30px #fff,
+                   0 0 40px #fff,
+                   0 0 70px rgb(81, 194, 214),
+                   0 0 80px rgb(81, 194, 214),
+                   0 0 100px rgb(81, 194, 214),
+                   0 0 150px rgb(81, 194, 214);
+  }
+  to {
+      text-shadow: 0 0 5px #fff,
+                   0 0 10px #000,
+                   0 0 15px rgb(67, 84, 233),
+                   0 0 20px rgb(81, 194, 214),
+                   0 0 35px rgb(81, 194, 214),
+                   0 0 40px rgb(81, 194, 214),
+                   0 0 50px rgb(81, 194, 214),
+                   0 0 75px rgb(81, 194, 214);
+  }
+}
+@keyframes Glow {
+  from {
+      text-shadow: 0 0 10px #fff,
+                   0 0 20px #fff,
+                   0 0 30px #fff,
+                   0 0 40px #fff,
+                   0 0 70px rgb(81, 194, 214),
+                   0 0 80px rgb(81, 194, 214),
+                   0 0 100px rgb(81, 194, 214),
+                   0 0 150px rgb(81, 194, 214);
+  }
+  to {
+      text-shadow: 0 0 5px #fff,
+                   0 0 10px #000,
+                   0 0 15px rgb(67, 84, 233),
+                   0 0 20px rgb(81, 194, 214),
+                   0 0 35px rgb(81, 194, 214),
+                   0 0 40px rgb(81, 194, 214),
+                   0 0 50px rgb(81, 194, 214),
+                   0 0 75px rgb(81, 194, 214);
+  }
+}
+  #home .slide-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+#home .page1 {
+  background-image: url('./images/happy.jpg');
+  background-size: cover;
+}
+#home .page1 h1 {
+  font-size: 60px;
+  display: none;
+}
+#home .page1 .slide-container {
+  max-width: 1440px;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+}
+#home .page1 .slide-container .left-box {
+  padding-right: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 550px;
+}
+#home .breathe {
+  color: #fff;
+  -webkit-animation: Glow 1.5s ease infinite alternate;
+          animation: Glow 1.5s ease infinite alternate;
+}
+#home .page1 .slide-container .left-box .desc {
+  padding-top: 20px;
+  font-size: 16px;
+  line-height: 27px;
+  display: none;
+}
+#home .page1 .slide-container .left-box p,
+#home .page1 .slide-container .left-box h1 {
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+#home .page2 {
+  background-color: #000000;
+  width: 100%;
+  overflow: hidden;
+}
+#home .page2 .slide-container {
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+#home .page2 .slide-container .item {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+#home .page2 .slide-container .item::after {
+  position: absolute;
+  content: '';
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0,.5);
+  z-index: -1;
+}
+#home .page2 .slide-container .item1 {
+  background: url('./images/computer1.jpg') no-repeat;
+  background-position: left;
+  background-size: cover;
+}
+#home .page2 .slide-container .item2 {
+  background: url('./images/computer2.jpg') no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+#home .page2 .slide-container .item3 {
+  background: url('./images/computer3.jpg') no-repeat;
+  background-position: right;
+  background-size: cover;
+}
+#home .page2 .slide-container .item:hover {
+  cursor: pointer;
+}
+#home .page2 .slide-container .item:hover p {
+  text-shadow: 1px 1px 1px #000;
+}
+#home .page2 .slide-container .item2:hover p {
+  text-shadow: 1px 1px 1px #ccc;
+}
+#home .page2 .slide-container img {
+  width: 120px;
+  height: 120px;
+  margin-top: 60px;
+}
+#home .page2 .slide-container .number {
+  padding-top: 50px;
+  font-size: 32px;
+}
+#home .page2 .slide-container .desc {
+  font-size: 16px;
+  width: 300px;
+  color: #fff;
+}
+#home .page3 .grid-container {
+  overflow: hidden;
+  position: relative;
+  background-color: #FAFAFA;
+  height: 785px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+#home .page3 .grid-container #home-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#home .page3 .grid-container .line1 {
+  display: flex;
+}
+#home .page3 .grid-container .line1:hover {
+  cursor: pointer;
+}
+#home .page3 .grid-container .line1 .leftpart {
+  background-color: rgba(255, 0, 0, 0.4);
+  width: 595px;
+  height: 350px;
+  margin-right: 15px;
+  position: relative;
+}
+#home .page3 .grid-container .line1 .leftpart .text-box {
+  position: absolute;
+  bottom: 20px;
+  left: 15px;
+  color: #fff;
+}
+#home .page3 .grid-container .line1 .leftpart .text-box .time {
+  font-size: 12px;
+}
+#home .page3 .grid-container .line1 .leftpart .text-box .desc {
+  font-size: 22px;
+}
+#home .page3 .grid-container .line1 .rightpart {
+  width: 595px;
+}
+#home .page3 .grid-container .line1 .rightpart .toppart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#home .page3 .grid-container .line1 .rightpart .toppart .topleftpart {
+  width: 290px;
+  height: 220px;
+  margin-right: 15px;
+  background-color: #006909;
+}
+#home .page3 .grid-container .line1 .rightpart .toppart .toprightpart {
+  width: 290px;
+  height: 220px;
+  background-color: #006909;
+}
+#home .page3 .grid-container .line1 .rightpart .bottompart {
+  margin-top: 15px;
+  width: 100%;
+  height: 115px;
+  background-color: #006909;
+}
+#home .page3 .grid-container .line2 {
+  height: 220px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#home .page3 .grid-container .line2 .item {
+  width: 290px;
+  height: 220px;
+  background-color: #3863b4;
+  margin-right: 15px;
+}
+#home .page3 .grid-container .line2 .item:last-child {
+  margin-right: 0;
+}
+#home .page3 .student-testimonials {
+  padding-top: 80px;
+  background-color: #FFFFFF;
+  height: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#home .page3 .student-testimonials:hover .title:after {
+  transform: scale3d(1, 1, 1);
+}
+#home .page3 .student-testimonials .title {
+  color: #000000;
+  font-size: 46px;
+  font-weight: initial;
+  padding-bottom: 10px;
+  margin: 0;
+  margin-bottom: 80px;
+  position: relative;
+}
+#home .page3 .student-testimonials .title:after {
+  content: ' ';
+  display: block;
+  width: 100%;
+  height: 3px;
+  background-color: #000;
+  position: absolute;
+  left: 0;
+  bottom: 0px;
+  transition: all 0.3s ease-in-out;
+  /*通过transform的缩放scale来让初始时x轴为0*/
+  transform: scale3d(0, 1, 1);
+  /*将坐标原点移到元素的中间，以原点为中心进行缩放*/
+  transform-origin: 50% 0;
+}
+#home .page3 .student-testimonials .testimonials-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#home .page3 .student-testimonials .testimonials-content:hover {
+  cursor: pointer;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box {
+  width: 555px;
+  height: 555px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.04);
+  margin-right: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 60px;
+  box-sizing: border-box;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .top-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-bottom: 41px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .top-box .head-img {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-right: 20px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .top-box .head-img img {
+  position: absolute;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .top-box .name-desc .name {
+  font-size: 20px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .top-box .name-desc .desc {
+  font-size: 12px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .subtitle {
+  font-size: 16px;
+  color: #3864B4;
+  padding-bottom: 15px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .summary-box {
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: 300;
+  padding-bottom: 119px;
+  letter-spacing: 0.2px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .more-content {
+  color: #FF165E;
+  font-size: 16px;
+  line-height: 25px;
+  letter-spacing: 0.2px;
+}
+#home .page3 .student-testimonials .testimonials-content .evaluate-box .more-content:hover {
+  cursor: pointer;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box {
+  width: 555px;
+  height: 555px;
+  background: #3864B4;
+  padding: 80px;
+  position: relative;
+  color: #fff;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .lable {
+  padding: 9px 15px;
+  color: #fff;
+  background-color: #4B74BB;
+  border-radius: 30px;
+  width: fit-content;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .story-box-title {
+  font-size: 30px;
+  line-height: 34px;
+  letter-spacing: 0.1;
+  color: #fff;
+  font-weight: 200;
+  padding-top: 23px;
+  padding-bottom: 20px;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .summary {
+  line-height: 16px;
+  font-size: 14px;
+  padding-bottom: 10px;
+  color: #fff;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .bottom-line {
+  position: absolute;
+  bottom: 30px;
+  left: 80px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .bottom-line .head-img {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-right: 20px;
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .bottom-line .head-img img {
+  position: absolute;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#home .page3 .student-testimonials .testimonials-content .story-box .bottom-line .student-name {
+  font-size: 16px;
+  color: #fff;
+}
+
+  </style>
+</head>
+<body>
+  <div id="home">
+    <div class="section page1">
+        <div class="slide-container">
+            <div class="left-box">
+                <h1 class="text1">秘小乐</h1>
+                <h1 class="text2">Lil happy</h1>
+                <p class="desc">2年前端开发经验，对前沿知识保持充分对的好奇。</p>
+            </div>
+        </div>
+    </div>
+    <div class="section page2">
+        <div class="slide-container">
+            <div class="item item1"><img src="./images/logoforme.png" />
+                <p class="number">Personal Data</p>
+                <p class="desc">姓名：秘小乐</p>
+                <p class="desc">性别：男</p>
+                <p class="desc">年龄：24</p>
+                <p class="desc">学校：贵州师范大学</p>
+                <p class="desc">专业：电子信息科学与技术</p>
+            </div>
+            <div class="item item2"><img src="./images/logoforme.png" />
+                <p class="number">Work Experience</p>
+                <p class="desc">2018年8月：coding。。。</p>
+                <p class="desc">2017年7月：工作</p>
+                <p class="desc">2016年6月：实习</p>
+            </div>
+            <div class="item item3"><img src="./images/logoforme.png" />
+                <p class="number">Skills</p>
+                <p class="desc">多</p>
+                <p class="desc">的</p>
+                <p class="desc">一</p>
+                <p class="desc">批</p>
+            </div>
+        </div>
+    </div>
+    <div class="section page3">
+        <div class="grid-container">
+            <div class="line1">
+                <div class="leftpart animated" id="animate-grid1">
+                    <div class="text-box">
+                        <div class="time">2019-08-20</div>
+                        <div class="desc">1232131231231231232131232131</div>
+                    </div>
+                </div>
+                <div class="rightpart">
+                    <div class="toppart">
+                        <div class="topleftpart animated" id="animate-grid2"></div>
+                        <div class="toprightpart animated" id="animate-grid3"></div>
+                    </div>
+                    <div class="bottompart animated" id="animate-grid4"></div>
+                </div>
+            </div>
+            <div class="line2">
+                <div class="item animated" id="animate-grid5"></div>
+                <div class="item animated" id="animate-grid6"></div>
+                <div class="item animated" id="animate-grid7"></div>
+                <div class="item animated" id="animate-grid8"></div>
+            </div>
+        </div>
+        <div class="student-testimonials">
+            <h2 class="title">我的项目经历</h2>
+            <div class="testimonials-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+$(document).ready(function(){ mainPage.init() })
+</script>
+<script>
+  // 首页滚动插件初始化
+const mainPage = {
+  init:function(){
+    this.initOther()
+    $('#home').fullpage({
+      scrollOverflow: true,
+      scrollingSpeed: 1000,
+      responsiveWidth: 1200,
+      scrollOverflowOptions: {
+        // bounce:false,
+        // momentum:false,
+        mouseWheel:true,
+        // preventDefault:false,
+        scrollbars:true,
+        freeScroll:true,
+        scrollX:true,
+        scrollY:true,
+      },
+      afterRender: () => {
+        // 文字动画
+        // console.log($('#home .left-box h1.text1'))
+        $('#home .left-box h1.text1').slideDown(()=>{
+          $('#home .left-box h1.text2').slideDown(()=>{
+            $('#home .left-box p.desc').slideDown();
+            $('#home .right-box video').animate({ opacity: 1 },1000);
+            $('#home .left-box h1').addClass('breathe')
+          });
+        });
+      },
+      onLeave: (index, nextIndex, direction) => {
+        // 当切换到第一屏的时候
+        if(nextIndex === 1) {
+          $('#home .left-box h1.text1').slideDown(()=>{
+            $('#home .left-box h1.text2').slideDown(()=>{
+              $('#home .left-box p.desc').slideDown();
+              $('#home .right-box video').animate({opacity: 1},1000);
+              $('#home .left-box h1').addClass('breathe')
+            });
+          });
+        }
+    
+        // 当切换到第二屏的时候
+        if(nextIndex === 2) {
+          $('#home .left-box h1').removeClass('breathe')
+          $('#home .left-box h1.text1').fadeOut()
+          $('#home .left-box h1.text2').fadeOut()
+          $('#home .left-box p.desc').fadeOut()
+          $('#home .right-box video').animate({opacity: 0},1000);
+  
+          $('#home .section.page2 .item1').removeClass('animated zoomOut');
+          $('#home .section.page2 .item2').removeClass('animated zoomOut');
+          $('#home .section.page2 .item3').removeClass('animated zoomOut');
+          $('#home .section.page2 .item1').addClass('animated zoomIn');
+          $('#home .section.page2 .item2').addClass('animated zoomIn');
+          $('#home .section.page2 .item3').addClass('animated zoomIn');
+        } else {
+          $('#home .section.page2 .item1').removeClass('animated zoomIn');
+          $('#home .section.page2 .item2').removeClass('animated zoomIn');
+          $('#home .section.page2 .item3').removeClass('animated zoomIn');
+          $('#home .section.page2 .item1').addClass('animated zoomOut');
+          $('#home .section.page2 .item2').addClass('animated zoomOut');
+          $('#home .section.page2 .item3').addClass('animated zoomOut');
+        }
+  
+        // 当切换到第三屏的时候
+        if (nextIndex === 3) {
+          $('.gec-header-content').hide()
+          $('#animate-grid1').addClass(' slideInLeft')
+          $('#animate-grid2').addClass(' slideInRight')
+          $('#animate-grid3').addClass(' slideInRight')
+          $('#animate-grid4').addClass(' slideInRight')
+          $('#animate-grid5').addClass(' slideInLeft')
+          $('#animate-grid6').addClass(' slideInLeft')
+          $('#animate-grid7').addClass(' slideInRight')
+          $('#animate-grid8').addClass(' slideInRight')
+  
+          $('#animate-grid1').removeClass(' slideOutLeft')
+          $('#animate-grid2').removeClass(' slideOutRight')
+          $('#animate-grid3').removeClass(' slideOutRight')
+          $('#animate-grid4').removeClass(' slideOutRight')
+          $('#animate-grid5').removeClass(' slideOutLeft')
+          $('#animate-grid6').removeClass(' slideOutLeft')
+          $('#animate-grid7').removeClass(' slideOutRight')
+          $('#animate-grid8').removeClass(' slideOutRight')
+  
+        } else {
+          $('.gec-header-content').show()
+          $('#animate-grid1').removeClass(' slideInLeft')
+          $('#animate-grid2').removeClass(' slideInRight')
+          $('#animate-grid3').removeClass(' slideInRight')
+          $('#animate-grid4').removeClass(' slideInRight')
+          $('#animate-grid5').removeClass(' slideInLeft')
+          $('#animate-grid6').removeClass(' slideInLeft')
+          $('#animate-grid7').removeClass(' slideInRight')
+          $('#animate-grid8').removeClass(' slideInRight')
+  
+          $('#animate-grid1').addClass(' slideOutLeft')
+          $('#animate-grid2').addClass(' slideOutRight')
+          $('#animate-grid3').addClass(' slideOutRight')
+          $('#animate-grid4').addClass(' slideOutRight')
+          $('#animate-grid5').addClass(' slideOutLeft')
+          $('#animate-grid6').addClass(' slideOutLeft')
+          $('#animate-grid7').addClass(' slideOutRight')
+          $('#animate-grid8').addClass(' slideOutRight')
+        }
+      }
+    })
+  },
+  initOther: function() {
+    // 第二屏的hover特效
+    $('.item1').hover(()=>{ 
+      $('.item1 .number').toggleClass('animated heartBeat'); 
+    },()=>{
+      $('.item1 .number').toggleClass('animated heartBeat');
+    })
+    $('.item2').hover(()=>{ 
+      $('.item2 .number').toggleClass('animated heartBeat'); 
+    },()=>{
+      $('.item2 .number').toggleClass('animated heartBeat'); 
+    })
+    $('.item3').hover(()=>{ 
+      $('.item3 .number').toggleClass('animated heartBeat'); 
+    },()=>{
+      $('.item3 .number').toggleClass('animated heartBeat'); 
+    })
+  }
+
+}
+</script>
+</html>
