@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> 从vue源码看props</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../resume.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            从vue源码看props
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button"> 源码</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="-vue-props">从vue源码看props</h1>
+          <h2 id="-">前言</h2>
+          <p>平时写vue的时候知道<code>props</code>有很多种用法，今天我们来看看vue内部是怎么处理<code>props</code>中那么多的用法的。</p>
+          <h3 id="vue-props-">vue提供的props的用法</h3>
+          <p> 1.数组形式</p>
+          <pre><code> props: [&#39;name&#39;, &#39;value&#39;]
+</code></pre>
+          <p>2.对象形式(对象形式内部也提供了三种写法)</p>
+          <pre><code>props: {
+    // 基础的类型检查
+    name: String,
+    // 多个可能的类型
+    value: [String, Number],
+    // 对象形式
+    id: {
+        type: Number,
+        required: true
+    }
+}
+</code></pre>
+          <p>###props实现的原理</p>
+          <pre><code>function normalizeProps (options: Object, vm: ?Component) {
+  const props = options.props
+  if (!props) return
+  const res = {}
+  let i, val, name
+  if (Array.isArray(props)) {
+    ...
+  } else if (isPlainObject(props)) {
+    ...
+  } else if (process.env.NODE_ENV !== &#39;production&#39;) {
+    ...
+  }
+  options.props = res
+}
+</code></pre>
+          <p><code>normalizeProps</code>函数就是vue实际处理<code>props</code>的地方，从函数名的翻译我们可以看出该函数的功能就是标准化<code>props</code>的值。该函数主要分成3部分：</p>
+          <p>① 从<code>options</code>对象中获取<code>props</code>的值并且定义一个res空对象；</p>
+          <p>②几个<code>if ... else</code>，分别根据props值的不同类型来处理res对象；</p>
+          <p>③ 用处理后的res对象覆盖原来<code>options</code>对象的<code>props</code>属性的值。</p>
+          <p>接下来看看那几个<code>if ... else</code>的代码：</p>
+          <pre><code>if (Array.isArray(props)) {
+    i = props.length
+    while (i--) {
+      val = props[i]
+      if (typeof val === &#39;string&#39;) {
+        name = camelize(val)
+        res[name] = { type: null }
+      } else if (process.env.NODE_ENV !== &#39;production&#39;) {
+        warn(&#39;props must be strings when using array syntax.&#39;)
+      }
+    }
+  }
+</code></pre>
+          <p>这个代码实际就是处理<code>props</code>的值为数组的情况:</p>
+          <p>例如： <code>props: [&#39;name&#39;, &#39;value&#39;]</code>。使用while遍历该数组，如果数组内元素的类型不是字符串并且不是生产环境，那么就抛错：<code>props的值类型为数组时，数组里面的元素的类型就必须是字符串</code>。如果是字符串的情况下，使用<code>camelize</code>函数处理一下<code>val</code>的值，并且赋值给<code>name</code>变量。这里的<code>camelize</code>函数的实际作用就是将&#39;-&#39;转换为驼峰。<code>camelize</code>函数具体的实现方式在后面分析。然后在<code>res</code>对象上面添加一个为<code>name</code>变量的属性，该属性的值为空对象<code>{ type: null }</code>。</p>
+          <p><code>props: [&#39;name&#39;, &#39;value&#39;]</code>这种写法经过上面的处理后就会变成了下面这样：</p>
+          <pre><code>props: {
+    name: {
+        type: null
+    },
+    value: {
+        type: null
+    }
+}
+</code></pre>
+          <p>接下来看看下面这个<code>else if(isPlainObject(props))</code>,这里的<code>isPlainObject</code>函数实际就是返回<code>props</code>的值是否为<code>object</code>，<code>isPlainObject</code>函数的具体实现我们也在后面分析。</p>
+          <pre><code>else if (isPlainObject(props)) {
+   for (const key in props) {
+     val = props[key]
+     name = camelize(key)
+     res[name] = isPlainObject(val)
+       ? val
+       : { type: val }
+   }
+ }
+</code></pre>
+          <p>使用<code>for...in</code>遍历<code>props</code>对象，和上面一样使用<code>camelize</code>函数将&#39;-&#39;转换为驼峰。这里有个三目运算：</p>
+          <pre><code>res[name] = isPlainObject(val) ? val : { type: val }
+</code></pre>
+          <p>判断了一下<code>val</code>如果是<code>object</code>，那么在res对象上面添加一个为<code>name</code>变量的属性，并且将该属性的值设置为<code>val</code>。这个其实就是处理下面这种<code>props</code>的写法：</p>
+          <pre><code>props: {
+   // 对象形式
+   id: {
+       type: Number,
+       required: true
+   }
+}
+</code></pre>
+          <p>如果<code>val</code>不是<code>object</code>，那么也在res对象上面添加一个为<code>name</code>变量的属性，并且将该属性的值设置为<code>{ type: val }</code>。这个其实就是处理下面这种<code>props</code>的写法：</p>
+          <pre><code>props: {
+    // 基础的类型检查
+    name: String,
+    // 多个可能的类型
+    value: [String, Number],
+}
+</code></pre>
+          <p>经过处理后<code>props</code>会变成了下面这样：</p>
+          <pre><code>props: {
+    name: {
+        type: String
+    },
+    value: {
+        type: [String, Number]
+    }
+}
+</code></pre>
+          <p>所以不管我们使用vue提供的<code>props</code>哪种写法，最终vue都会帮我们转换成下面这种类型：</p>
+          <pre><code>props: {
+    name: {
+        ...,
+        type: &#39;类型&#39;
+    }
+}
+</code></pre>
+          <p>接下来看看上面提到的util函数<code>isPlainObject</code>，先把源码贴出来</p>
+          <pre><code>const _toString = Object.prototype.toString
+
+export function isPlainObject (obj: any): boolean {
+  return _toString.call(obj) === &#39;[object Object]&#39;
+}
+</code></pre>
+          <p>其实<code>Object.prototype.toString.call(obj)</code>的值为obj对象的类型。例如：</p>
+          <pre><code>Object.prototype.toString.call({a: 1})      // [object Object]
+Object.prototype.toString.call(new Date)    // [object Date]
+Object.prototype.toString.call([1])         // [object Array]
+Object.prototype.toString.call(null)        // [object Null]
+</code></pre>
+          <p>接下来看看上面提到的util函数camelize，还是先把源码贴出来。</p>
+          <pre><code>export function cached&lt;F: Function&gt; (fn: F): F {
+  const cache = Object.create(null)
+  return (function cachedFn (str: string) {
+    const hit = cache[str]
+    return hit || (cache[str] = fn(str))
+  }: any)
+}
+
+const camelizeRE = /-(\w)/g
+export const camelize = cached((str: string): string =&gt; {
+  return str.replace(camelizeRE, (_, c) =&gt; c ? c.toUpperCase() : &#39;&#39;)
+})
+</code></pre>
+          <p>这里定义了两个函数，分别是<code>cached</code>和<code>camelize</code>，其中<code>camelize</code>就是我们上面调用的，<code>cached</code>是在<code>camelize</code>函数内部调用的。</p>
+          <p>我们先来看看<code>camelize</code>函数，其实<code>camelize</code>函数就是执行<code>cached</code>后返回的一个函数。调用<code>cached</code>时传入了一个箭头函数，箭头函数内部是调用了正则的<code>replace</code>方法，将传入的str变量中匹配<code>/-(\w)/g</code>的变成大写字母，并且返回replace后的值。（也就是将<code>-</code>转换成驼峰）。</p>
+          <p>再来看看<code>cached</code>函数，该函数传入的变量其实就是<code>camelize</code>那里的箭头函数，首先定义了一个<code>cache</code>空对象，然后直接返回了<code>cachedFn</code>函数。我们在外部调用<code>camelize(key)</code>时，其实就是执行了这里的了<code>cachedFn</code>函数，<code>str</code>的值就是传入的<code>key</code>的值。很明显这里是一个闭包，可以在外部调用<code>camelize</code>函数的时候可以修改或者读取这里定义的<code>cache</code>对象的值。获取<code>cache</code>对象中<code>key</code>为<code>str</code>变量值的属性值赋值给<code>hit</code>变量。如果有<code>hit</code>变量的值，那么就直接返回<code>hit</code>的值，如果没有就执行<code>camelize</code>传入的箭头函数，并且将箭头函数的返回值赋值给<code>catche</code>对象的<code>str</code>属性。如果下次调用<code>camelize</code>函数时传入了相同的<code>str</code>，那么就不会执行箭头函数，直接返回闭包中的<code>cache</code>对象的<code>str</code>属性的值。这里是性能优化的一种手段。</p>
+          <p>例如：第一次调用 <code>camelize(&#39;name&#39;)</code>后，<code>cache</code>对象的值就变成了<code>{name: &#39;name&#39;}</code>。然后在其他地方再次调用 <code>camelize(&#39;name&#39;)</code>时再次执行<code>cachedFn</code>函数，此时<code>hit</code>变量的值为&#39;name&#39;。直接返回hit变量的值，不会执行传入的箭头函数。</p>
+
+          <div class="timer">
+            2019-03-02
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <div class="blog-bottom">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>
