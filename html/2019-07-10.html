@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> 从vue源码看v-model</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../resume.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            从vue源码看v-model
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button"> 源码</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="-vue-v-model">从vue源码看v-model</h1>
+          <h2 id="-">前言</h2>
+          <p>v-model是Vue用于表单元素上创建双向数据绑定，它本质是一个语法糖，在单向数据绑定的基础上，增加了监听用户输入事件并更新数据的功能。请看官网对v-model的介绍：<a href="https://cn.vuejs.org/v2/api/#v-model">https://cn.vuejs.org/v2/api/#v-model</a></p>
+          <p>###v-model源码解析</p>
+          <p>####genDirectives</p>
+          <p>Vue初始化组件时通过genDirectives(el,state)初始化指令。（这里的el已经通过parseHTML将html结构转换成Vue的AST语法树，state是根据用户定义组件的options新建的CodegenState对象）。</p>
+          <pre><code>&lt;div id=&quot;test&quot;&gt;
+    请输入：&lt;input type=&quot;text&quot; v-model=&quot;message&quot;&gt;&lt;br/&gt;
+    你输入的是：&lt;input type=&quot;text&quot; v-model=&quot;message&quot; disabled &gt;
+&lt;/div&gt;
+</code></pre>
+          <p>当用户在html页面上写了v-model指令进行数据双向绑定，Vue通过state找到model指令对应的方法model(el,dir,_warn)，并执行该方法。（这里双!!表示将函数返回结果转换成Boolean类型）</p>
+          <pre><code>var gen = state.directives[dir.name];
+    if (gen) {
+      needRuntime = !!gen(el, dir, state.warn);
+    }
+</code></pre>
+          <p>####model</p>
+          <pre><code>if (el.component) {
+    genComponentModel(el, value, modifiers);
+    return false
+  } else if (tag === &#39;select&#39;) {
+    genSelect(el, value, modifiers);
+  } else if (tag === &#39;input&#39; &amp;&amp; type === &#39;checkbox&#39;) {
+    genCheckboxModel(el, value, modifiers);
+  } else if (tag === &#39;input&#39; &amp;&amp; type === &#39;radio&#39;) {
+    genRadioModel(el, value, modifiers);
+  } else if (tag === &#39;input&#39; || tag === &#39;textarea&#39;) {
+    genDefaultModel(el, value, modifiers);
+  } else if (!config.isReservedTag(tag)) {
+    genComponentModel(el, value, modifiers);
+    return false
+  } else {
+    warn$1(
+      &quot;&lt;&quot; + (el.tag) + &quot; v-model=\&quot;&quot; + value + &quot;\&quot;&gt;: &quot; +
+      &quot;v-model is not supported on this element type. &quot; +
+      &#39;If you are working with contenteditable, it\&#39;s recommended to &#39; +
+      &#39;wrap a library dedicated for that purpose inside a custom component.&#39;
+    );
+  }
+</code></pre>
+          <p>model()根据表单元素的tag标签以及type属性的值，调用不同的方法也就验证了官网所说的“随表单控件类型不同而不同。”这里调用的就是genDefaultModel().</p>
+          <p>####genDefaultModel</p>
+          <pre><code>var type = el.attrsMap.type;
+</code></pre>
+          <p>获取表单元素的类型，此处type=&#39;text&#39;.</p>
+          <pre><code>{
+    var value$1 = el.attrsMap[&#39;v-bind:value&#39;] || el.attrsMap[&#39;:value&#39;];
+    var typeBinding = el.attrsMap[&#39;v-bind:type&#39;] || el.attrsMap[&#39;:type&#39;];
+    if (value$1 &amp;&amp; !typeBinding) {
+      var binding = el.attrsMap[&#39;v-bind:value&#39;] ? &#39;v-bind:value&#39; : &#39;:value&#39;;
+      warn$1(
+        binding + &quot;=\&quot;&quot; + value$1 + &quot;\&quot; conflicts with v-model on the same element &quot; +
+        &#39;because the latter already expands to a value binding internally&#39;
+      );
+    }
+  }
+</code></pre>
+          <p>检测该表单元素是否同时有v-model绑定和v-bind:value。</p>
+          <pre><code> var ref = modifiers || {};
+  var lazy = ref.lazy;
+  var number = ref.number;
+  var trim = ref.trim;
+  var needCompositionGuard = !lazy &amp;&amp; type !== &#39;range&#39;;
+  var event = lazy
+    ? &#39;change&#39;
+    : type === &#39;range&#39;
+      ? RANGE_TOKEN
+      : &#39;input&#39;;
+</code></pre>
+          <p>获取修饰符lazy,number及trim</p>
+          <p>lazy 取代input监听change事件</p>
+          <p>number 输入字符串转为数字</p>
+          <p>trim 输入首尾空格过滤</p>
+          <pre><code> var valueExpression = &#39;$event.target.value&#39;;
+  if (trim) {
+    valueExpression = &quot;$event.target.value.trim()&quot;;
+  }
+  if (number) {
+    valueExpression = &quot;_n(&quot; + valueExpression + &quot;)&quot;;
+  }
+</code></pre>
+          <p>定义变量valueExpression，本例子的情况valueExpression为&#39;$event.target.value&#39;。</p>
+          <pre><code>var code = genAssignmentCode(value, valueExpression);
+
+</code></pre>
+          <pre><code>function genAssignmentCode (
+  value,
+  assignment
+) {
+  var res = parseModel(value);
+  if (res.key === null) {
+    return (value + &quot;=&quot; + assignment)
+  } else {
+    return (&quot;$set(&quot; + (res.exp) + &quot;, &quot; + (res.key) + &quot;, &quot; + assignment + &quot;)&quot;)
+  }
+}
+</code></pre>
+          <p>通过genAssignmentCode()方法生成v-model value值得代码。根据本文的例子返回的结果就是&quot;message=$event.target.value&quot;。</p>
+          <pre><code>if (needCompositionGuard) {
+    code = &quot;if($event.target.composing)return;&quot; + code;
+  }
+</code></pre>
+          <p>添加event.target.composing判断。event.target.composing用于判断此次input事件是否是IME构成触发的，如果是IME构成，直接return。IME 是输入法编辑器(Input Method Editor) 的英文缩写，IME构成指我们在输入文字时，处于未确认状态的文字。它会同样会触发input事件，但不会触发v-model更新数据。</p>
+          <pre><code>addProp(el, &#39;value&#39;, (&quot;(&quot; + value + &quot;)&quot;));
+</code></pre>
+          <pre><code>function addProp (el, name, value) {
+  (el.props || (el.props = [])).push({ name: name, value: value });
+  el.plain = false;
+}
+</code></pre>
+          <pre><code>addHandler(el, event, code, null, true);
+
+</code></pre>
+          <pre><code>function addHandler (el,name,value,modifiers,important,warn){
+    /*其他代码省略*/
+    var newHandler = {
+        value: value.trim()
+      };
+    var handlers = events[name];
+      if (Array.isArray(handlers)) {
+        important ? handlers.unshift(newHandler) : handlers.push(newHandler);
+      } else if (handlers) {
+        events[name] = important ? [newHandler, handlers] : [handlers, newHandler];
+      } else {
+        events[name] = newHandler;
+      }
+}
+</code></pre>
+          <p>将code作为el的对应event处理的方法handler</p>
+          <p>此处<code>events[&#39;input&#39;]=if($event.target.composing)return;message =$event.target.value</code></p>
+          <p>最后原来的html结构就由：</p>
+          <pre><code>&lt;input type=&quot;text&quot; v-model=&quot;message&quot;&gt;
+</code></pre>
+          <p>变成了：</p>
+          <pre><code>&lt;input type=&quot;text&quot; :value=&quot;message&quot; @input=&quot;if($event.target.composing)return;message =$event.target.value&quot;&gt;
+</code></pre>
+          <div class="timer">
+            2019-07-10
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <!-- <div class="blog-bottom">
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div> -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>

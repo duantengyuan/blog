@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> 从vue源码看Vue基本方法</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../resume.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            从vue源码看Vue基本方法
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button"> 源码</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="-vue-vue-">从vue源码看Vue基本方法</h1>
+          <h2 id="-">前言</h2>
+          <p>前几次都是Vue的某些函数的源码，今天来看看它的基本源码和基本方法。</p>
+          <pre><code>src
+├── compiler        # 编译相关 
+├── core            # 核心代码 
+├── platforms       # 不同平台的支持
+├── server          # 服务端渲染
+├── sfc             # .vue 文件解析
+├── shared          # 共享代码
+</code></pre>
+          <p>这是vue的源码结构</p>
+          <p>###Vue对象
+            在使用vue时我们知道都是使用<code>new Vue()</code>,来将vue的实例挂载到dom对象上从而运用数据驱动的方式来扩展我们的代码，我们首先来看一下Vue的定义</p>
+          <p>从源头上看来自core目录下的instance的index.js文件</p>
+          <pre><code>function Vue (options) {
+  if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp;
+    !(this instanceof Vue)
+  ) {
+    warn(&#39;Vue is a constructor and should be called with the `new` keyword&#39;)
+  }
+  this._init(options)
+}
+
+initMixin(Vue)
+stateMixin(Vue)
+eventsMixin(Vue)
+lifecycleMixin(Vue)
+renderMixin(Vue)
+
+</code></pre>
+          <p>在js中一切皆函数，其实Vue就是一个函数，在初始化的时候执行原型链上的_init方法，vue没有把所有的方法都写在函数内部，这样从代码上来说，每次实例化的时候不会生成重复的代码</p>
+          <p>主要还是代码结构更清晰，利用mixin的概念，把每个模块都抽离开，这样代码在结构和扩展性都有很大提高，这里的每个mixin先不说，先看以一下整体结构，这里定义完还要被core里的index.js再次包装调用<code>initGlobalAPI(Vue)</code>来初始化全局的api方法，在web下runtime文件夹下引用再次封装，vue是分为运行时可编译和只运行的版本，所以如果需要编译，在Vue原型上添加了$mount方法，先来看一下<code>initGlobalAPI</code>,在instance中都是在原型链上扩展方法，在这里是直接在Vue上扩展静态方法</p>
+          <pre><code>function initGlobalAPI (Vue: GlobalAPI) {
+  // config
+  const configDef = {}
+  configDef.get = () =&gt; config
+  if (process.env.NODE_ENV !== &#39;production&#39;) {
+    configDef.set = () =&gt; {
+      warn(
+        &#39;Do not replace the Vue.config object, set individual fields instead.&#39;
+      )
+    }
+  }
+  Object.defineProperty(Vue, &#39;config&#39;, configDef)
+
+  // exposed util methods.
+  // NOTE: these are not considered part of the public API - avoid relying on
+  // them unless you are aware of the risk.
+  Vue.util = {
+    warn,
+    extend,
+    mergeOptions,
+    defineReactive
+  }
+
+  Vue.set = set
+  Vue.delete = del
+  Vue.nextTick = nextTick
+
+  // 2.6 explicit observable API
+  Vue.observable = &lt;T&gt;(obj: T): T =&gt; {
+    observe(obj)
+    return obj
+  }
+
+  Vue.options = Object.create(null)
+  ASSET_TYPES.forEach(type =&gt; {
+    Vue.options[type + &#39;s&#39;] = Object.create(null)
+  })
+
+  // this is used to identify the &quot;base&quot; constructor to extend all plain-object
+  // components with in Weex&#39;s multi-instance scenarios.
+  Vue.options._base = Vue
+
+  extend(Vue.options.components, builtInComponents)
+
+  initUse(Vue)
+  initMixin(Vue)
+  initExtend(Vue)
+  initAssetRegisters(Vue)
+}
+</code></pre>
+          <p>###数据双向绑定
+            在使用vue时看一个最简单的例子</p>
+          <pre><code>&lt;div class=&quot;root&quot;&gt;
+  {{msg}}
+&lt;/div&gt;
+
+var root = new Vue({
+  el: &#39;#root&#39;,
+  data: {
+    msg: &#39;hello&#39;
+  }
+})
+</code></pre>
+          <p>我们可以看到这样简单的几行就可以将数据绑定到dom对象上，那内部做了什么呢，先来看一下前面说的，在实例化会调用原型链上的_init方法</p>
+          <pre><code>Vue.prototype._init = function (options?: Object) {
+  const vm: Component = this
+  // a uid
+  vm._uid = uid++
+
+  let startTag, endTag
+  /* istanbul ignore if */
+  if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp; config.performance &amp;&amp; mark) {
+    startTag = `vue-perf-start:${vm._uid}`
+    endTag = `vue-perf-end:${vm._uid}`
+    mark(startTag)
+  }
+
+  // a flag to avoid this being observed
+  vm._isVue = true
+  // merge options
+  if (options &amp;&amp; options._isComponent) {
+    // optimize internal component instantiation
+    // since dynamic options merging is pretty slow, and none of the
+    // internal component options needs special treatment.
+    initInternalComponent(vm, options)
+  } else {
+    vm.$options = mergeOptions(
+      resolveConstructorOptions(vm.constructor),
+      options || {},
+      vm
+    )
+  }
+  /* istanbul ignore else */
+  if (process.env.NODE_ENV !== &#39;production&#39;) {
+    initProxy(vm)
+  } else {
+    vm._renderProxy = vm
+  }
+  // expose real self
+  vm._self = vm
+  initLifecycle(vm)
+  initEvents(vm)
+  initRender(vm)
+  callHook(vm, &#39;beforeCreate&#39;)
+  initInjections(vm) // resolve injections before data/props
+  initState(vm)
+  initProvide(vm) // resolve provide after data/props
+  callHook(vm, &#39;created&#39;)
+
+  /* istanbul ignore if */
+  if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp; config.performance &amp;&amp; mark) {
+    vm._name = formatComponentName(vm, false)
+    mark(endTag)
+    measure(`vue ${vm._name} init`, startTag, endTag)
+  }
+
+  if (vm.$options.el) {
+    vm.$mount(vm.$options.el)
+  }
+}
+</code></pre>
+          <p>这个方法包括合并配置，初始化生命周期，时间，渲染，data，props等，最后判断有没有传入的el执行$mount方法挂载到dom对象上</p>
+          <p>看一下compile版本的mount方法，先将之前定义的mount的方法缓存后边使用，判断有没有render方法，vue也可以写类似react的render函数，如果没有的话，判断有没有模版字符串，获取模版字符串，或者直接获取html字符串使用compileToFunctions编译模版，编译好了之后主要是为了生成render方法，无论使用单文件组件还是模版方法还是之前demo中的方法都必须经过render方法，最后执行之前缓存的mount方法，这个方法是在runtime的index.js中定义的</p>
+          <p>这个实际上就是在执行生命周期中的mount周期，mountComponent方法，我删除了一下在dev环境的处理，这不影响逻辑，可以看出mount方法主要就是定义了一个Watcher来相应组件的变化</p>
+          <p>执行了初始化的一些生命周期，render方法主要就是用来根据模版字符串来生成虚拟dom元素，类似react的jsx编译成ReactElmemnt的，可以看出两个库从设计的基础架构还是很像的</p>
+          <pre><code>var mount = Vue.prototype.$mount; // 缓存mount方法
+Vue.prototype.$mount = function (
+  el,
+  hydrating
+) {
+  el = el &amp;&amp; query(el);
+
+  /* istanbul ignore if */
+  if (el === document.body || el === document.documentElement) {
+    warn(
+      &quot;Do not mount Vue to &lt;html&gt; or &lt;body&gt; - mount to normal elements instead.&quot;
+    );
+    return this
+  }
+
+  var options = this.$options;
+  // resolve template/el and convert to render function
+  if (!options.render) { // 如果没有render方法
+    var template = options.template;
+    if (template) { // 如果存在template模版文件
+      if (typeof template === &#39;string&#39;) {
+        if (template.charAt(0) === &#39;#&#39;) {
+          template = idToTemplate(template);
+          /* istanbul ignore if */
+          if (!template) {
+            warn(
+              (&quot;Template element not found or is empty: &quot; + (options.template)),
+              this
+            );
+          }
+        }
+      } else if (template.nodeType) {
+        template = template.innerHTML;
+      } else {
+        {
+          warn(&#39;invalid template option:&#39; + template, this);
+        }
+        return this
+      }
+    } else if (el) { //存在el直接获取当前dom下的html字符串模版
+      template = getOuterHTML(el);
+    }
+    if (template) {
+      /* istanbul ignore if */
+      if (config.performance &amp;&amp; mark) {
+        mark(&#39;compile&#39;);
+      }
+
+      var ref = compileToFunctions(template, {// 编译模版
+        outputSourceRange: &quot;development&quot; !== &#39;production&#39;,
+        shouldDecodeNewlines: shouldDecodeNewlines,
+        shouldDecodeNewlinesForHref: shouldDecodeNewlinesForHref,
+        delimiters: options.delimiters,
+        comments: options.comments
+      }, this);
+      var render = ref.render;
+      var staticRenderFns = ref.staticRenderFns;
+      options.render = render;
+      options.staticRenderFns = staticRenderFns;
+
+      /* istanbul ignore if */
+      if (config.performance &amp;&amp; mark) {
+        mark(&#39;compile end&#39;);
+        measure((&quot;vue &quot; + (this._name) + &quot; compile&quot;), &#39;compile&#39;, &#39;compile end&#39;);
+      }
+    }
+  }
+  return mount.call(this, el, hydrating) // 最后执行原先定义的mount方法
+};
+function mountComponent (
+  vm: Component,
+  el: ?Element,
+  hydrating?: boolean
+): Component {
+  vm.$el = el
+  if (!vm.$options.render) {
+    vm.$options.render = createEmptyVNode // 创建一个空的vnode节点
+    if (process.env.NODE_ENV !== &#39;production&#39;) {
+    }
+  }
+  callHook(vm, &#39;beforeMount&#39;) // 执行生命周期方法
+
+  let updateComponent
+  /* istanbul ignore if */
+  if (process.env.NODE_ENV !== &#39;production&#39; &amp;&amp; config.performance &amp;&amp; mark) {
+  } else {
+    updateComponent = () =&gt; {
+      vm._update(vm._render(), hydrating) // 执行原型链上的_update方法，_render()生成虚拟dom，进行虚拟dom的比较
+    }
+  }
+  new Watcher(vm, updateComponent, noop, {
+    before () {
+      if (vm._isMounted &amp;&amp; !vm._isDestroyed) {
+        callHook(vm, &#39;beforeUpdate&#39;)
+      }
+    }
+  }, true /* isRenderWatcher */)
+  hydrating = false
+
+  // manually mounted instance, call mounted on self
+  // mounted is called for render-created child components in its inserted hook
+  if (vm.$vnode == null) {
+    vm._isMounted = true
+    callHook(vm, &#39;mounted&#39;)
+  }
+  return vm
+}
+</code></pre>
+          <div class="timer">
+            2019-06-17
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <!-- <div class="blog-bottom">
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div> -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>
