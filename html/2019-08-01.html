@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> 从vue源码看vue-router</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../resume.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            从vue源码看vue-router
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button"> 源码</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="-vue-vue-router">从vue源码看vue-router</h1>
+          <h2 id="-">前言</h2>
+          <p>Vue Router 是 Vue.js 官方的路由管理器。它和 Vue.js 的核心深度集成，让构建单页面应用变得易如反掌。</p>
+          <p>###目录结构</p>
+          <pre><code>├── components  // 组件
+│   ├── link.js   // route-link的实现
+│   └── view.js   // route-view的实现
+├── create-matcher.js  // 创建匹配
+├── create-route-map.js  // 创建路由的映射
+├── history  // 操作浏览器记录的一系列内容
+│   ├── abstract.js  // 非浏览器的history
+│   ├── base.js    // 基本的history
+│   ├── hash.js    // hash模式的history
+│   └── html5.js   // html5模式的history
+├── index.js   // 入口文件
+├── install.js  // 插件安装的方法
+└── util   // 工具类库
+    ├── async.js    // 异步操作的工具库
+    ├── dom.js    // dom相关的函数
+    ├── location.js     // 对location的处理
+    ├── misc.js     // 一个工具方法
+    ├── params.js   // 处理参数
+    ├── path.js     // 处理路径
+    ├── push-state.js  // 处理html模式的 pushState
+    ├── query.js  //对query的处理
+    ├── resolve-components.js  //异步加载组件
+    ├── route.js  // 路由
+    ├── scroll.js  //处理滚动
+    └── warn.js  // 打印一些警告
+</code></pre>
+          <p>我们知道 ， 我们在使用 vue-router 的时候 ，主要有以下几步：</p>
+          <pre><code>&lt;div id=&quot;app&quot;&gt;
+    &lt;!-- 路由匹配到的组件将渲染在这里 --&gt;
+    &lt;router-view&gt;&lt;/router-view&gt;
+&lt;/div&gt;
+</code></pre>
+          <pre><code>// 1. 安装 插件
+Vue.use(VueRouter);
+
+// 2. 创建router对象
+const router = new VueRouter({
+    routes // 路由列表 eg: [{ path: &#39;/foo&#39;, component: Foo }]
+});
+
+// 3. 挂载router
+const app = new Vue({
+    router
+}).$mount(&#39;#app&#39;);
+</code></pre>
+          <p>其中 VueRouter 对象，就在vue-router 的入口文件 src/index.js</p>
+          <p>VueRouter 原型上定义了一系列的函数，我们日常经常会使用到。主要有 ： go 、 push 、 replace 、 back 、 forward 。
+            以及一些导航守护 ： beforeEach 、beforeResolve 、afterEach 等等</p>
+          <p>上面html 中使用到的 router-view ，以及经常用到的 router-link 则存在 src/components 目录下。</p>
+          <p>###路由模式及降级处理</p>
+          <p>vue-router 默认是 hash 模式 ， 即使用 URL 的 hash 来模拟一个完整的 URL ，于是当 URL 改变时，页面不会重新加载。</p>
+          <p>vue-router 还支持 history 模式，这种模式充分利用了 history.pushState 来完成 URL 跳转。</p>
+          <p>在不支持 history.pushState 的浏览器 ， 会自动会退到 hash 模式。</p>
+          <p>是否回退可以通过 fallback 配置项来控制，默认值为 true</p>
+          <pre><code>const router = new VueRouter({
+  mode: &#39;history&#39;, // history 或 hash
+  routes: [...]
+});
+</code></pre>
+          <p>###根据 mode 确定类型</p>
+          <p>首先看下 VueRouter 的构造方法 ， 文件位置 src/index.js</p>
+          <pre><code>import { HashHistory } from &#39;./history/hash&#39;
+import { HTML5History } from &#39;./history/html5&#39;
+import { AbstractHistory } from &#39;./history/abstract&#39;
+
+    // ... more
+
+    constructor(options: RouterOptions = {}) {
+        // ... more
+
+        // 默认hash模式
+        let mode = options.mode || &#39;hash&#39;
+
+        // 是否降级处理
+        this.fallback = mode === &#39;history&#39; &amp;&amp; !supportsPushState &amp;&amp; options.fallback !== false
+
+        // 进行降级处理
+        if (this.fallback) {
+            mode = &#39;hash&#39;
+        }
+
+        if (!inBrowser) {
+            mode = &#39;abstract&#39;
+        }
+        this.mode = mode
+
+        // 根据不同的mode进行不同的处理
+        switch (mode) {
+            case &#39;history&#39;:
+                this.history = new HTML5History(this, options.base)
+                break
+            case &#39;hash&#39;:
+                this.history = new HashHistory(this, options.base, this.fallback)
+                break
+            case &#39;abstract&#39;:
+                this.history = new AbstractHistory(this, options.base)
+                break
+            default:
+                if (process.env.NODE_ENV !== &#39;production&#39;) {
+                    assert(false, `invalid mode: ${mode}`)
+                }
+        }
+    }
+</code></pre>
+          <p>我们可以看到，会判断是否支持 history ， 然后根据 fallback 来确定是否要降级。然后，根据不同的 mode ， 分别实例化不同的 history 。 （HTML5History、HashHistory、AbstractHistory）</p>
+          <p>###push 方法</p>
+          <p>我们平时调用的时候， 一直都是用 this.$router.push(&#39;home&#39;) , 这种形式调用。</p>
+          <p>首先，在 VueRouter 对象上有一个 push 方法 。</p>
+          <pre><code>// 文件位置： src/index.js
+export default class VueRouter {
+    // ... more
+
+    push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+        this.history.push(location, onComplete, onAbort);
+    }
+}
+</code></pre>
+          <p>我们看到，其没有做任何处理，直接转发到 this.history.push(location, onComplete, onAbort)。</p>
+          <p>上面我们讲到，这个处理，会根据 history 的初始化对象不同而做不同处理。我们来分别看看细节</p>
+          <p>####mode === hash</p>
+          <pre><code>export class HashHistory extends History {
+    // ...more
+
+    // 跳转到
+    push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+        const { current: fromRoute } = this;
+        this.transitionTo(
+            location,
+            route =&gt; {
+                pushHash(route.fullPath);
+                handleScroll(this.router, route, fromRoute, false);
+                onComplete &amp;&amp; onComplete(route);
+            },
+            onAbort
+        );
+    }
+}
+// 切换路由
+// 会判断是否支持pushState ，支持则使用pushState，否则切换hash
+function pushHash(path) {
+    if (supportsPushState) {
+        pushState(getUrl(path));
+    } else {
+        window.location.hash = path;
+    }
+}
+</code></pre>
+          <p>####mode === history</p>
+          <pre><code>export class HTML5History extends History {
+    // ...more
+
+    // 增加 hash
+    push(location: RawLocation, onComplete?: Function, onAbort?: Function) {
+        const { current: fromRoute } = this;
+        this.transitionTo(
+            location,
+            route =&gt; {
+                pushState(cleanPath(this.base + route.fullPath));
+                handleScroll(this.router, route, fromRoute, false);
+                onComplete &amp;&amp; onComplete(route);
+            },
+            onAbort
+        );
+    }
+}
+</code></pre>
+          <p>两种模式的 push 实现区别并不大，都是调用了 transitionTo , 区别在于： 一个调用 pushHash ， 一个调用 pushState.</p>
+          <p>其他的 go 、 replace 、getCurrentLocation 都是类似的实现方式。</p>
+          <p>####hash和history的区别</p>
+          <p>最直观的区别就是在url中hash 带了一个很丑的 <code>#</code> ，而history是没有#的。vue默认使用hash。</p>
+          <p><code>hash</code></p>
+          <p>—— 即地址栏 URL 中的 # 符号（此 hash 不是密码学里的散列运算）。</p>
+          <p>比如这个 URL：<a href="http://www.aaa.com/#/hello，hash">http://www.aaa.com/#/hello，hash</a> 的值为 #/hello。它的特点在于：hash 虽然出现在 URL 中，但不会被包括在 HTTP 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面。</p>
+          <p><code>history</code></p>
+          <p>—— 利用了 HTML5 History Interface 中新增的 pushState() 和 replaceState() 方法。（需要特定浏览器支持）
+            这两个方法应用于浏览器的历史记录栈，在当前已有的 back、forward、go 的基础之上，它们提供了对历史记录进行修改的功能。只是当它们执行修改时，虽然改变了当前的 URL，但浏览器不会立即向后端发送请求。</p>
+          <p>因此可以说，hash 模式和 history 模式都属于浏览器自身的特性，Vue-Router 只是利用了这两个特性（通过调用浏览器提供的接口）来实现前端路由。</p>
+          <p>####history模式的问题</p>
+          <p>通过history api，我们丢掉了丑陋的#，但是它也有个问题：不怕前进，不怕后退，就怕刷新，f5，（如果后端没有准备的话）,因为刷新是实实在在地去请求服务器的。</p>
+          <p>在hash模式下，前端路由修改的是#中的信息，而浏览器请求时不会将 # 后面的数据发送到后台，所以没有问题。但是在history下，你可以自由的修改path，当刷新时，如果服务器中没有相应的响应或者资源，则会刷新出来404页面。</p>
+
+          <div class="timer">
+            2019-08-01
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <!-- <div class="blog-bottom">
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div> -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>
