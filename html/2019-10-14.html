@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> Vue3.0 双向绑定原理</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="../resume.html">
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            Vue3.0 双向绑定原理
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> vue</span><span class="span_button"> 源码</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="vue3-0-">Vue3.0 双向绑定原理</h1>
+          <h2 id="-">前言</h2>
+          <p>Vue.js 3.0的一些新特性，其中一个很重要的改变就是Vue3 将使用 ES6的Proxy 作为其观察者机制，取代之前使用的Object.defineProperty。</p>
+          <p>###为什么要取代Object.defineProperty</p>
+          <p>总结来说Object.defineProperty方法存在一定的局限性</p>
+          <p>在Vue中，Object.defineProperty无法监控到数组下标的变化，导致直接通过数组的下标给数组设置值，不能实时响应。 为了解决这个问题，经过vue内部处理后可以使用以下几种方法来监听数组</p>
+          <pre><code>push()
+pop()
+shift()
+unshift()
+splice()
+sort()
+reverse()
+</code></pre>
+          <p>Object.defineProperty只能劫持对象的属性,因此我们需要对每个对象的每个属性进行遍历。Vue里，是通过递归以及遍历data对象来实现对数据的监控的，如果属性值也是对象那么需要深度遍历,显然如果能劫持一个完整的对象，不管是对操作性还是性能都会有一个很大的提升。</p>
+          <p>###什么是Proxy</p>
+          <p>Proxy 是ES6中新增的一个特性，可以理解成，在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截，因此提供了一种机制，可以对外界的访问进行过滤和改写。Proxy 这个词的原意是代理，用在这里表示由它来“代理”某些操作，可以译为“代理器”。</p>
+          <p>基本用法</p>
+          <blockquote>
+            <p>//ES6 原生提供 Proxy 构造函数，用来生成 Proxy 实例。</p>
+            <p>var proxy = new Proxy(target, handler);</p>
+          </blockquote>
+          <p>参数解释</p>
+          <blockquote>
+            <p>1、target: 是用Proxy包装的被代理对象（可以是任何类型的对象，包括原生数组，函数，甚至另一个代理）。</p>
+            <p>2、handler: 是一个对象，其声明了代理target 的一些操作，其属性是当执行一个操作时定义代理的行为的函数。</p>
+          </blockquote>
+          <blockquote>
+            <p>Proxy 对象的所有用法，都是上面这种形式，不同的只是handler参数的写法</p>
+          </blockquote>
+          <p>Proxy 一共 支持13 种的拦截,相对Object.defineProperty更加丰富。</p>
+          <ul>
+            <li>get(target, propKey, receiver)：拦截对象属性的读取，比如proxy.foo和proxy[&#39;foo&#39;]。</li>
+            <li>set(target, propKey, value, receiver)：拦截对象属性的设置，比如proxy.foo = v或proxy[&#39;foo&#39;] = v，返回一个布尔值。</li>
+            <li>has(target, propKey)：拦截propKey in proxy的操作，返回一个布尔值。</li>
+            <li>deleteProperty(target, propKey)：拦截delete proxy[propKey]的操作，返回一个布尔值。</li>
+            <li>ownKeys(target)：拦截Object.getOwnPropertyNames(proxy)、Object.getOwnPropertySymbols(proxy)、Object.keys(proxy)、for...in循环，返回一个数组。该方法返回目标对象所有自身的属性的属性名，而Object.keys()的返回结果仅包括目标对象自身的可遍历属性。</li>
+            <li>getOwnPropertyDescriptor(target, propKey)：拦截Object.getOwnPropertyDescriptor(proxy, propKey)，返回属性的描述对象。</li>
+            <li>defineProperty(target, propKey, propDesc)：拦截Object.defineProperty(proxy, propKey, propDesc）、Object.defineProperties(proxy, propDescs)，返回一个布尔值。</li>
+            <li>preventExtensions(target)：拦截Object.preventExtensions(proxy)，返回一个布尔值。</li>
+            <li>getPrototypeOf(target)：拦截Object.getPrototypeOf(proxy)，返回一个对象。</li>
+            <li>isExtensible(target)：拦截Object.isExtensible(proxy)，返回一个布尔值。</li>
+            <li>setPrototypeOf(target, proto)：拦截Object.setPrototypeOf(proxy, proto)，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。</li>
+            <li>apply(target, object, args)：拦截 Proxy 实例作为函数调用的操作，比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)。</li>
+            <li>construct(target, args)：拦截 Proxy 实例作为构造函数调用的操作，比如new proxy(...args)。</li>
+          </ul>
+          <p>Demo</p>
+          <pre><code>// #注：Proxy 实例也可以作为其他对象的原型对象。
+var proxy = new Proxy({}, {
+  get: function(target, property) {
+    return 35;
+  }
+});
+
+let obj = Object.create(proxy);
+obj.time // 35
+</code></pre>
+          <pre><code>var handler = {
+  get: function(target, name) {
+    if (name === &#39;prototype&#39;) {
+      return Object.prototype;
+    }
+    return &#39;Hello, &#39; + name;
+  },
+
+  apply: function(target, thisBinding, args) {
+    return args[0];
+  },
+
+  construct: function(target, args) {
+    return {value: args[1]};
+  }
+};
+
+var fproxy = new Proxy(function(x, y) {
+  return x + y;
+}, handler);
+
+fproxy(1, 2) // 1
+new fproxy(1, 2) // {value: 2}
+fproxy.prototype === Object.prototype // true
+fproxy.foo === &quot;Hello, foo&quot; // true
+</code></pre>
+          <p>###Proxy实现数据劫持</p>
+          <pre><code>observe(data) {
+  const that = this;
+  let handler = {
+   get(target, property) {
+      return target[property];
+    },
+    set(target, key, value) {
+      let res = Reflect.set(target, key, value);
+      that.subscribe[key].map(item =&gt; {
+        item.update();
+      });
+      return res;
+    }
+  }
+  this.$data = new Proxy(data, handler);
+}
+</code></pre>
+          <p>Vue3.0的一个主要点就是数据劫持的实现变更，其他的与Vue2.0大致相同</p>
+
+          <div class="timer">
+            2019-10-14
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <!-- <div class="blog-bottom">
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div> -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>
