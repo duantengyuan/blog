@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> gulp+pug+stylus+jq快速制作一个h5页面</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="https://duantengyuan.github.io/resume/public/" target="_blank">
+
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            gulp+pug+stylus+jq快速制作一个h5页面
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> gulp</span><span class="span_button"> stylus</span><span class="span_button"> rem</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="gulp-pug-stylus-jq-h5-">gulp+pug+stylus+jq快速制作一个h5页面</h1>
+          <h2 id="-">前言</h2>
+          <p>公司圣诞节+元旦，要上一个营销页，pc+移动双端，因为设计和文案不同所以只能做成非响应式，即为两个页面两个项目，于是想到了gulp，又前几天看了stylus，想试试，不如在得到消息的前一天，盘一个这个框架来玩玩。</p>
+          <p>让我们先来看看<a href="https://www.gulpjs.com.cn/">gulp</a>的特性</p>
+          <p>简单：代码优于配置、node 最佳实践、精简的 API 集，gulp 让工作前所未有的简单。</p>
+          <p>高效：基于 node 强大的流(stream)能力，gulp 在构建过程中并不把文件立即写入磁盘，从而提高了构建速度。</p>
+          <p>生态：遵循严格的准则，确保我们的插件结构简单、运行结果可控。</p>
+          <p>再来看看<a href="https://stylus.bootcss.com/">stylus</a></p>
+          <ul>
+            <li><strong>冒号可有可无</strong></li>
+            <li><strong>分号可有可无</strong></li>
+            <li><strong>逗号可有可无</strong></li>
+            <li><strong>括号可有可无</strong></li>
+            <li><strong>变量</strong></li>
+            <li>插值（Interpolation）</li>
+            <li>混合（Mixin）</li>
+            <li>数学计算</li>
+            <li>强制类型转换</li>
+            <li>动态引入</li>
+            <li>条件表达式</li>
+            <li>迭代</li>
+            <li>嵌套选择器</li>
+            <li>父级引用</li>
+            <li>Variable function calls</li>
+            <li>词法作用域</li>
+            <li>内置函数（超过 60 个）</li>
+            <li>语法内函数（In-language functions）</li>
+            <li>压缩可选</li>
+            <li>图像内联可选</li>
+            <li>Stylus 可执行程序</li>
+            <li>健壮的错误报告</li>
+            <li>单行和多行注释</li>
+            <li>CSS 字面量</li>
+            <li>字符转义</li>
+            <li>TextMate 捆绑</li>
+            <li>以及更多！</li>
+          </ul>
+          <p>我感觉光是上面的那几点，就值得我们去使用它了，你想想这么一个场景：同样是一个HTML的框架，别人写css以后还要找less，sass的那种嵌套关系，你使用了jade语法，再写css时直接把你的pug复制到styl文件里，把静态渲染文案删掉，就可以直接写样式了。多么棒的体验！</p>
+          <h2 id="-">准备工作</h2>
+          <p>搭建一个框架</p>
+          <pre><code>- src
+- - js
+- - - main.js
+- - style
+- - - pageStyle
+- - - - test.styl
+- - - main.styl
+- - template
+- - - test.pug
+- - index.pug
+- .gitignore
+- gulpfile.js
+- package.json
+
+</code></pre>
+          <p>基本结构就是这样</p>
+          <p>接下来准备gulp文件</p>
+          <pre><code>const { src, dest, parallel,watch } = require(&#39;gulp&#39;);
+const browserSync = require(&#39;browser-sync&#39;).create();
+const pug = require(&#39;gulp-pug&#39;);
+const stylus = require(&#39;gulp-stylus&#39;);
+const minifyCSS = require(&#39;gulp-csso&#39;);
+const concat = require(&#39;gulp-concat&#39;);
+const rem = require(&#39;gulp-rem&#39;);
+const autoprefixer = require ( &#39;gulp-autoprefixer&#39; );
+const replace = require(&#39;gulp-string-replace&#39;);
+
+function browser() {
+  css()
+  watch(&#39;src/style/**/*.styl&#39;, parallel(css,reload))
+  watch(&#39;src/js/**/*.js&#39;, parallel(js,reload))
+  watch(&#39;src/**/*.pug&#39;,parallel(html,reload))
+  browserSync.init({server: { baseDir: &quot;./build/&quot; , host: &#39;0.0.0.0&#39; }});
+}
+
+function html() {
+  return src(&#39;src/*.pug&#39;).pipe(pug()).pipe(dest(&#39;build/&#39;))
+}
+
+function css() {
+  return src(&#39;src/style/*.styl&#39;)
+    .pipe(stylus()) // 使用stylus
+    .pipe(autoprefixer({ cascade : true ,remove : true })).pipe(rem({ width: 375, unit: &#39;px&#39; })) //- rem布局设置
+    .pipe(minifyCSS())
+    .pipe(dest(&#39;build/css&#39;))
+}
+
+function js() {
+  const buffer = ``;
+  return src(&#39;src/js/*.js&#39;, { sourcemaps: true })
+    .pipe(concat(&#39;app.min.js&#39;))
+    .pipe(dest(&#39;build/js&#39;, { sourcemaps: true }))
+}
+
+function build(cb) {
+  html();
+  css();
+  js();
+  cb();
+}
+
+function reload(cb) {
+  browserSync.reload()
+  cb()
+}
+
+exports.default = browser
+exports.build = build
+
+</code></pre>
+          <p>js上把rem布局优化好</p>
+          <pre><code>main.js
+
+document.documentElement.style.fontSize = document.documentElement.clientWidth*20/320+&#39;px&#39;;
+$(window).resize(function(){
+  document.documentElement.style.fontSize = document.documentElement.clientWidth*20/320+&#39;px&#39;;
+});
+
+</code></pre>
+          <p>然后index上</p>
+          <pre><code>index.pug
+
+&lt;!DOCTYPE html&gt;
+html(lang=&quot;zh&quot;)
+  head
+    meta(charset=&quot;UTF-8&quot;)
+    meta(name=&quot;keywords&quot; content=&quot;&quot;)
+    meta(name=&quot;description&quot; content=&quot;&quot;)
+    meta(name =&quot;viewport&quot; content =&quot;width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no&quot;)
+    meta(http-equiv=&quot;X-UA-Compatible&quot;, content=&quot;ie=edge&quot;)
+    title 
+    link(rel=&quot;stylesheet&quot;, href=&quot;./css/main.css&quot;) 
+    script(src=&quot;https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js&quot;)
+  body
+    include template/test.pug
+    script(src=&quot;./js/app.min.js&quot;)
+
+</code></pre>
+          <p>main.styl</p>
+          <pre><code>main.styl
+
+@import &#39;cssreset&#39;;
+@import &#39;pageStyle/test&#39;;
+
+
+</code></pre>
+          <p>接下来看你的html和css</p>
+          <p><strong>html</strong></p>
+          <pre><code>test.pug
+
+.test-content
+  h1 哈哈哈
+
+
+</code></pre>
+          <p><strong>css</strong></p>
+          <pre><code>test.styl
+
+.test-content
+  display flex
+  height 100vh
+  h1
+    color red
+    font-size 40px
+
+</code></pre>
+          <p>是不是超级简单，然后打开控制台，看单位由px变为rem了，意味着它可以随着你屏幕的大小而等比放大缩小。</p>
+          <p>然后如果是pc端的话，删掉rem的那堆东西就行了，具体操作我写在项目的readme里了</p>
+          <p>代码我放在这个<a href="https://github.com/duantengyuan/jq-template">template</a>里，记得帮我点个star！</p>
+
+          <div class="timer">
+            2019-12-26
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">2年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <!-- <div class="blog-bottom">
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div> -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>

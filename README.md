@@ -40,6 +40,8 @@ description:  // 描述
 记得回去点个星星★
 记得回去点个星星★
 
+彩蛋:`/blog/resume.html`
+
 
 
 
