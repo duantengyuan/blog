@@ -191,11 +191,41 @@
 #home .page3 .grid-container .line1 {
   display: flex;
 }
-#home .page3 .grid-container .line1:hover {
+#home .page3 .grid-container .animated{
+  position: relative;
+  overflow: hidden;
+}
+#home .page3 .grid-container .animated .after{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0,.5);
+  z-index: 9;
+  color: #fff;
+  padding: 20px;
+}
+#home .page3 .grid-container .animated img{
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 8;
+
+}
+#home .page3 .grid-container .animated:hover {
   cursor: pointer;
 }
+#home .page3 .grid-container .animated:hover img{
+  transition: all 6s;
+  transform: translateY(-80%);
+}
+#home .page3 .grid-container .animated:hover .after {
+  background-color: rgba(0,0,0,0);
+  color: #000;
+}
 #home .page3 .grid-container .line1 .leftpart {
-  background-color: rgba(255, 0, 0, 0.4);
   width: 595px;
   height: 350px;
   margin-right: 15px;
@@ -221,22 +251,15 @@
   justify-content: center;
   align-items: center;
 }
-#home .page3 .grid-container .line1 .rightpart .toppart .topleftpart {
-  width: 290px;
-  height: 220px;
-  margin-right: 15px;
-  background-color: #006909;
-}
 #home .page3 .grid-container .line1 .rightpart .toppart .toprightpart {
-  width: 290px;
-  height: 220px;
-  background-color: #006909;
+  width: 595px;
+  height: 170px;
+
 }
 #home .page3 .grid-container .line1 .rightpart .bottompart {
   margin-top: 15px;
   width: 100%;
-  height: 115px;
-  background-color: #006909;
+  height: 165px;
 }
 #home .page3 .grid-container .line2 {
   height: 220px;
@@ -248,16 +271,13 @@
 #home .page3 .grid-container .line2 .item {
   width: 290px;
   height: 220px;
-  background-color: #3863b4;
   margin-right: 15px;
 }
 #home .page3 .grid-container .line2 .item:last-child {
   margin-right: 0;
 }
 #home .page3 .student-testimonials {
-  padding-top: 80px;
   background-color: #FFFFFF;
-  height: 900px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -415,7 +435,9 @@
   font-size: 16px;
   color: #fff;
 }
-
+#home .textCont {
+  padding-top: 40px;
+}
   </style>
 </head>
 <body>
@@ -436,7 +458,7 @@
                 <p class="desc">姓名：秘小乐</p>
                 <p class="desc">性别：男</p>
                 <p class="desc">年龄：24</p>
-                <p class="desc">学校：贵州师范大学</p>
+                <p class="desc">学校：贵州师范学院</p>
                 <p class="desc">专业：电子信息科学与技术</p>
             </div>
             <div class="item item2"><img src="./images/logoforme.png" />
@@ -454,36 +476,58 @@
             </div>
         </div>
     </div>
-    <div class="section page3">
-        <div class="grid-container">
-            <div class="line1">
-                <div class="leftpart animated" id="animate-grid1">
-                    <div class="text-box">
-                        <div class="time">2019-08-20</div>
-                        <div class="desc">1232131231231231232131232131</div>
-                    </div>
-                </div>
-                <div class="rightpart">
-                    <div class="toppart">
-                        <div class="topleftpart animated" id="animate-grid2"></div>
-                        <div class="toprightpart animated" id="animate-grid3"></div>
-                    </div>
-                    <div class="bottompart animated" id="animate-grid4"></div>
-                </div>
-            </div>
-            <div class="line2">
-                <div class="item animated" id="animate-grid5"></div>
-                <div class="item animated" id="animate-grid6"></div>
-                <div class="item animated" id="animate-grid7"></div>
-                <div class="item animated" id="animate-grid8"></div>
-            </div>
-        </div>
+    <div class="section page3 textCont">
         <div class="student-testimonials">
-            <h2 class="title">我的项目经历</h2>
+            <h2 class="title">项目经历</h2>
             <div class="testimonials-content">
 
             </div>
         </div>
+    </div>
+
+
+    <div class="section page3">
+        <!-- 展示 -->
+        <div class="grid-container student-testimonials">
+            <h2 class="title">项目部分展示</h2>
+
+          <div class="line1">
+              <div class="leftpart animated" id="animate-grid1">
+                <div class="after">集思学院项目官网</div>
+                <img src="http://q3ocr7t1z.bkt.clouddn.com/pathacademics.jpg" alt="">
+              </div>
+              <div class="rightpart">
+                  <div class="toppart">
+                      <div class="toprightpart animated" id="animate-grid3">
+                        <div class="after">学术网站</div>
+                        <img src="http://q3ocr7t1z.bkt.clouddn.com/aihubpbl.png" alt="">
+                      </div>
+                  </div>
+                  <div class="bottompart animated" id="animate-grid4">
+                    <div class="after">季度营销页</div>
+                    <img src="http://q3ocr7t1z.bkt.clouddn.com/sem.jpg" alt="">
+                  </div>
+              </div>
+          </div>
+          <div class="line2">
+              <div class="item animated" id="animate-grid5">
+                <div class="after">集思学院官网移动端</div>
+                <img src="http://q3ocr7t1z.bkt.clouddn.com/mpathacademics.jpg" alt="">
+              </div>
+              <div class="item animated" id="animate-grid6">
+                <div class="after">日志发布小程序</div>
+                <img src="http://q3ocr7t1z.bkt.clouddn.com/gecmp.png" alt="">
+              </div>
+              <div class="item animated" id="animate-grid7">
+                <div class="after">课程超市小程序</div>
+                <img src="http://q3ocr7t1z.bkt.clouddn.com/shopapp.jpg" alt="">
+              </div>
+              <div class="item animated" id="animate-grid8">
+                <div class="after">单词大战小程序</div>
+                <img src="http://q3ocr7t1z.bkt.clouddn.com/wordapp.png" alt="">
+              </div>
+          </div>
+      </div>
     </div>
 </div>
 </body>
@@ -556,7 +600,7 @@ const mainPage = {
         }
   
         // 当切换到第三屏的时候
-        if (nextIndex === 3) {
+        if (nextIndex === 4) {
           $('.gec-header-content').hide()
           $('#animate-grid1').addClass(' slideInLeft')
           $('#animate-grid2').addClass(' slideInRight')
