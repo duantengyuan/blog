@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title> 面试记录</title>
+  <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+  <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css' />
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/github-markdown.css">
+  <link rel="stylesheet" type="text/css" href="../css/prism.css">
+  <link rel="stylesheet" type="text/css" href="../css/blog_index.css">
+</head>
+
+<body scroll="no">
+  <header>
+    <nav class="nav">
+      <ul class="title clear">
+        <a href="https://duantengyuan.github.io/resume/public/" target="_blank">
+
+          小乐
+        </a>
+        <a href="./index.html">
+          博客
+        </a>
+        <a href="./tag.html">
+          归档
+        </a>
+        <a href="https://juejin.im/user/5b7627036fb9a00974743264" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/%E6%8E%98%E9%87%91.png" alt="">
+        </a>
+        <a href="https://i.csdn.net/#/uc/profile" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/CSDN.png" alt="">
+        </a>
+        <a href="https://duantengyuan.github.io/blog/" class="big-media">
+          <img src="http://oys4ga3zg.bkt.clouddn.com/github.png" alt="">
+        </a>
+      </ul>
+    </nav>
+  </header>
+  <div class="body-content clear">
+    <section class="person-left-content">
+      <div class="detail-content">
+        <div class="header">
+          <h1>
+            面试记录
+          </h1>
+        </div>
+        <div class="readers">
+          阅读量<span id="busuanzi_value_page_pv"></span>
+        </div>
+        <div class="type clear">
+          <span class="span_button"> findJob</span>
+        </div>
+        <div class="content markdown-body">
+          <h1 id="-">面试记录</h1>
+          <h2 id="-">前言</h2>
+          <p>面试记录</p>
+          <p>##html</p>
+          <ul>
+            <li>Q：请叙述一下盒模型并说出如何改变盒模型</li>
+            <li>A：margin border padding content 改变盒模型用box-sizing</li>
+          </ul>
+          <p>##css</p>
+          <ul>
+            <li>Q：标签优先级</li>
+            <li>A：!important&gt;行内样式&gt;id选择器&gt;类选择器&gt;标签选择器&gt;通配符&gt;继承</li>
+          </ul>
+          <p>##js</p>
+          <p>链接 <a href="https://www.jianshu.com/p/f1f39d5b2a2e">https://www.jianshu.com/p/f1f39d5b2a2e</a></p>
+          <ul>
+            <li>Q：深浅拷贝</li>
+            <li>A：</li>
+          </ul>
+          <p>JSON法：<code>JSON.parse(JSON.stringify(XXX))</code> </p>
+          <p>递归实现：</p>
+          <pre><code> var deepCopy = function(obj) {
+    if (typeof obj !== &#39;object&#39;) return obj
+    var newObj = (Object.prototype.toString.call(obj) === &#39;[object Array]&#39;) ? [] : {}
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            newObj[key] = (typeof obj[key] !== &#39;object&#39;) ? obj[key]: deepCopy(obj[key])
+        }
+    }
+    return newObj
+}
+
+</code></pre>
+          <hr>
+          <ul>
+            <li>Q：判断是否是数组</li>
+            <li>A：</li>
+          </ul>
+          <p>使用 instanceof <code>arr instanceof Array</code></p>
+          <p>使用 constructor <code>arr.constructor === Array</code></p>
+          <p>判断对象是否有 push 等数组的一些方法 <code>!!arr.push &amp;&amp; !!arr.concat</code></p>
+          <p>使用对象的 toString <code>Object.prototype.toString.call(arr) === &#39;[object Array]&#39;</code></p>
+          <p>用 ES5 中的 Array.isArray 方法 <code>Array.isArray(arr)</code></p>
+          <hr>
+          <p>##vue</p>
+          <ul>
+            <li>Q：watch和computed区别</li>
+            <li>A：</li>
+          </ul>
+          <p>watch 一个数据影响多个数据</p>
+          <p>1.调用initWatch()函数初始化watch</p>
+          <p>2.遍历watch 调用createWatcher</p>
+          <p>3.最后创建一个用户$watch挂载到vue.prototype上 参数是data里的key 方法 </p>
+          <p>4.调用监听器watcher监听属性key 执行get方法</p>
+          <p>5.当key改变时会调用set方法 这时候 watcher会执行updata方法</p>
+          <p>computed 一个数据受多个数据影响</p>
+          <p>首先创建 vm._computedWatchers 为一个空对象，接着对 computed 对象做遍历，拿到计算属性的每一个 key，然后尝试获取这个 key 对应的 getter 函数，拿不到则在开发环境下报警告。接下来为每一个 getter 创建一个 watcher</p>
+          <hr>
+          <ul>
+            <li>Q：vuex属性</li>
+            <li>A：State、 Getter、Mutation 、Action、 Module</li>
+          </ul>
+          <p>State 相当于data</p>
+          <p>Getter 计算属性computed</p>
+          <p>Mutation 方法</p>
+          <p>Action 提交的是Mutation而不是直接变更状态 可包含异步操作</p>
+          <p>Module store的子模块</p>
+          <hr>
+          <ul>
+            <li>Q：为什么避免 v-if 和 v-for 用在一起</li>
+            <li>A：当 Vue 处理指令时，v-for 比 v-if 具有更高的优先级，通过v-if 移动到容器元素，不会再重复遍历列表中的每个值。取而代之的是，我们只检查它一次，且不会在 v-if 为否的时候运算 v-for。</li>
+          </ul>
+          <p>##ES6</p>
+          <p>链接 <a href="https://www.jianshu.com/p/cd6f8c9ce41e">https://www.jianshu.com/p/cd6f8c9ce41e</a></p>
+          <p>##webpack</p>
+          <p>链接 <a href="https://www.cnblogs.com/gaoht/p/11310365.html">https://www.cnblogs.com/gaoht/p/11310365.html</a></p>
+          <ul>
+            <li>Q：webpack和gulp不同</li>
+            <li>A：都是前端构建工具，gulp比较轻量化比如单独打包css，webpack用不同的loader来处理不同文件，用plugin来拓展功能</li>
+          </ul>
+          <hr>
+          <ul>
+            <li>Q：常见的webpack的loader</li>
+            <li>A：</li>
+          </ul>
+          <p>file-loader 把文件输出到一个文件夹中，在代码里通过相对路径引用</p>
+          <p>babel-loader ES6转为ES5</p>
+          <p>css-loader 加载 CSS，支持模块化、压缩、文件导入等特性</p>
+          <p>eslint-loader 通过 ESLint 检查 JavaScript 代码</p>
+          <hr>
+          <ul>
+            <li>Q：webpack构建流程</li>
+            <li>A：</li>
+          </ul>
+          <p>1.初始化参数：从配置文件和 Shell 语句中读取与合并参数，得出最终的参数；</p>
+          <p>2.开始编译：用上一步得到的参数初始化 Compiler 对象，加载所有配置的插件，执行对象的 run 方法开始执行编译；</p>
+          <p>3.确定入口：根据配置中的 entry 找出所有的入口文件；</p>
+          <p>4.编译模块：从入口文件出发，调用所有配置的 Loader 对模块进行翻译，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理；</p>
+          <p>5.完成模块编译：在经过第4步使用 Loader 翻译完所有模块后，得到了每个模块被翻译后的最终内容以及它们之间的依赖关系；</p>
+          <p>6.输出资源：根据入口和模块之间的依赖关系，组装成一个个包含多个模块的 Chunk，再把每个 Chunk 转换成一个单独的文件加入到输出列表，这步是可以修改输出内容的最后机会；</p>
+          <p>7.输出完成：在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统。</p>
+          <p>在以上过程中，Webpack 会在特定的时间点广播出特定的事件，插件在监听到感兴趣的事件后会执行特定的逻辑，并且插件可以调用 Webpack 提供的 API 改变 Webpack 的运行结果。</p>
+          <hr>
+          <ul>
+            <li>Q：如何利用webpack来优化前端性能？</li>
+            <li>A：</li>
+          </ul>
+          <p>压缩代码。删除多余的代码、注释、简化代码的写法等等方式。可以利用webpack的UglifyJsPlugin和ParallelUglifyPlugin来压缩JS文件， 利用cssnano（css-loader?minimize）来压缩css</p>
+          <p>利用CDN加速。在构建过程中，将引用的静态资源路径修改为CDN上对应的路径。可以利用webpack对于output参数和各loader的publicPath参数来修改资源路径</p>
+          <p>删除死代码（Tree Shaking）。将代码中永远不会走到的片段删除掉。可以通过在启动webpack时追加参数--optimize-minimize来实现</p>
+          <p>提取公共代码。</p>
+          <p>##算法</p>
+
+          <div class="timer">
+            2020-02-28
+          </div>
+          <!-- <div class="view-cnt">（111 人已阅）</div> -->
+        </div>
+        <div class="my-pay">
+          <div class="my-pay-btn">打赏</div>
+          <div class="my-pay-type clear">
+            <div class="my-pay-alipay my-pay-div"></div>
+            <div class="my-pay-weixin my-pay-div"></div>
+          </div>
+        </div>
+      </div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <div id="container"></div>
+      <script>
+        var gitment = new Gitment({
+          id: location.href, // 可选。默认为 location.href
+          owner: 'hua1995116',
+          repo: 'myblog',
+          oauth: {
+            client_id: '814dc8bc817d0a663020',
+            client_secret: 'ae232061068d5844c3665b55e34d7d5edb220113',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </section>
+    <section class="person-right-content">
+      <div class="person-title">
+        <div class="person-title-img"></div>
+        <div class="person-title-name">秘小乐</div>
+        <div class="person-title-desc">3年前端开发经验，对前沿知识保持充分对的好奇。</div>
+        <div class="person-title-tag">
+          <a href="https://juejin.im/user/5b7627036fb9a00974743264">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-juejin.png" alt="">
+          </a>
+          <a href="https://i.csdn.net/#/uc/profile">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-CSDN.png" alt="">
+          </a>
+          <a href="https://duantengyuan.github.io/blog/">
+            <img src="http://oys4ga3zg.bkt.clouddn.com/c-github.png" alt="">
+          </a>
+        </div>
+      </div>
+      <div class="person-tag person-title clear">
+      </div>
+    </section>
+  </div>
+  <!-- <div class="blog-bottom">
+  <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+</div> -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <script type="text/javascript" src="../js/prism.js"></script>
+  <script src="../js/axios.js"></script>
+  <script>
+    NProgress.start();
+    window.onload = function() {
+      NProgress.done();
+    }
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?f12dade0d0c1d020a5c06231f05b9f65";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+      var myPayBtn = document.querySelector('.my-pay-btn');
+      var myPayType = document.querySelector('.my-pay-type');
+      var btnShow = true;
+      myPayBtn.addEventListener('click', function() {
+        if (btnShow) {
+          myPayType.style.display = 'block';
+          btnShow = false;
+        } else {
+          myPayType.style.display = 'none';
+          btnShow = true;
+        }
+      });
+    })();
+    axios.get('../json/tagdata.json')
+      .then(function(response) {
+        data = response.data;
+        handletag(data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    function handletag(taglist) {
+      var personTag = document.querySelector('.person-tag');
+      var html = '';
+      for (var i in taglist) {
+        html += '<div class="person-tag-list">' + i + '</div>';
+      }
+      personTag.innerHTML = html;
+    }
+  </script>
+
+</body>
+
+</html>
